@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 #include "ImGuiManager.h"
 #include "PrimitiveDrawer.h"
+#include "AxisIndicator.h"
 #include <cassert>
 
 
@@ -30,7 +31,10 @@ void GameScene::Initialize() {
 	//ライン描画が参照するビュープロジェクションを指定する（アドレス渡し）
 	PrimitiveDrawer::GetInstance()->SetViewProjection(&viewProjection_);
 	debugCamera_ = new DebugCamera(1280, 720);
-	
+	//軸方向表示の表示を有効にする
+	AxisIndicator::GetInstance()->SetVisible(true);
+	//軸方向表示が参照するビュープロジェクションを指定する（アドレス渡し）
+	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 
 }
 
@@ -65,7 +69,7 @@ void GameScene::Draw() {
 #pragma region 背景スプライト描画
 	// 背景スプライト描画前処理
 	Sprite::PreDraw(commandList);
-	PrimitiveDrawer::GetInstance()->DrawLine3d({0, 0, 0}, {0,10,0}, {1.0f, 0.0f,0.0f, 1.0f});
+	PrimitiveDrawer::GetInstance()->DrawLine3d({0, 0, 0}, {0,20,0}, {1.0f, 0.0f,0.0f, 1.0f});
 	
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
@@ -84,7 +88,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+	//model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
 
 	// 3Dオブジェクト描画後処理
@@ -98,7 +102,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-	sprite_->Draw();
+	//sprite_->Draw();
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
