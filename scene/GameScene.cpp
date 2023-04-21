@@ -25,7 +25,7 @@ void GameScene::Initialize() {
 	model_ =  Model::Create();
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
-	soundDataHandle_ = audio_->LoadWave("mokugyo.wav");
+	soundDataHandle_ = audio_->LoadWave("fanfare.wav");
 	audio_->PlayWave(soundDataHandle_);
 	voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
 	//ライン描画が参照するビュープロジェクションを指定する（アドレス渡し）
