@@ -12,7 +12,7 @@ public:
 	/// 
 	/// 
 	void Initialize(Model* model, uint32_t textureHandle);
-
+	Input* input_ = nullptr;
 
 	///
 	///
