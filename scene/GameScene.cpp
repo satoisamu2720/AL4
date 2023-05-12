@@ -1,6 +1,6 @@
 #include "GameScene.h"
-#include "TextureManager.h"
 #include "Player.h"
+#include "TextureManager.h"
 #include <cassert>
 
 GameScene::GameScene() {}
@@ -19,21 +19,16 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 
 	player_ = new Player();
-	player_->Initialize(model_,textureHandle_);
+	player_->Initialize(model_, textureHandle_);
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
-	
 }
 
-void GameScene::Update() {
-	player_->Update();
-}
+void GameScene::Update() { player_->Update(); }
 
 void GameScene::Draw() {
-
-	
 
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
@@ -45,7 +40,6 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
-	
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -72,7 +66,7 @@ void GameScene::Draw() {
 
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
-	
+
 	/// </summary>
 
 	// スプライト描画後処理

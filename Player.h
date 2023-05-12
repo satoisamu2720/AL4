@@ -1,7 +1,6 @@
+#include "Model.h"
 #include "TextureManager.h"
 #include "WorldTransform.h"
-#include "Model.h"
-#include "input.h"
 #pragma once
 
 class Player {
@@ -9,26 +8,22 @@ public:
 	///
 	///
 	///
-	/// 
-	/// 
+	///
+	///
 	void Initialize(Model* model, uint32_t textureHandle);
-	Input* input_ = nullptr;
 
 	///
 	///
-	/// 
+	///
 	void Update();
 
 	///
 	///
-	/// 
+	///
 	void Draw(ViewProjection view);
-	
-	
-	private:
+
+private:
 	WorldTransform worldTransform_;
-	    Model* model_ = nullptr;
+	Model* model_ = nullptr;
 	uint32_t textureHandle_ = 0u;
-	//キーボード入力
-	Input* input_ = nullptr;
 };

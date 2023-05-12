@@ -1,15 +1,15 @@
 #pragma once
 
 #include "Audio.h"
+#include "DebugCamera.h"
 #include "DirectXCommon.h"
 #include "Input.h"
 #include "Model.h"
+#include "Player.h"
 #include "SafeDelete.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include "DebugCamera.h"
-#include "Player.h"
 
 /// <summary>
 /// ゲームシーン
@@ -17,7 +17,7 @@
 class GameScene {
 
 	Player* player_ = nullptr;
-	
+
 public: // メンバ関数
 	/// <summary>
 	/// コンストクラタ
@@ -26,7 +26,7 @@ public: // メンバ関数
 
 	/// <summary>
 	/// デストラクタ
-	
+
 	/// </summary>
 	~GameScene();
 
@@ -47,7 +47,7 @@ public: // メンバ関数
 
 private: // メンバ変数
 	// テクスチャハンドル
-	
+
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
