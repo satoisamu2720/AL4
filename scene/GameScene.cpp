@@ -12,7 +12,7 @@ GameScene::~GameScene() {
 
 void GameScene::Initialize() {
 
-	textureHandle_ = TextureManager::Load("sample.png");
+	textureHandle_ = TextureManager::Load("Genshin.png");
 
 	model_ = Model::Create();
 

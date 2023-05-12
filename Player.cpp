@@ -10,6 +10,8 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 
 	worldTransform_.Initialize();
+	//シングルトンインスタンスを無視する
+	input_ = Input::GetInstance();
 }
 
 void Player::Update() { worldTransform_.TransferMatrix(); }
