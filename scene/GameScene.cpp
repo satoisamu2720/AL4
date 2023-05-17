@@ -33,7 +33,7 @@ void GameScene::Draw() {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
-#pragma region 背景スプライト描画
+
 	// 背景スプライト描画前処理
 	Sprite::PreDraw(commandList);
 
@@ -45,9 +45,9 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 	// 深度バッファクリア
 	dxCommon_->ClearDepthBuffer();
-#pragma endregion
 
-#pragma region 3Dオブジェクト描画
+
+
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 
@@ -58,9 +58,9 @@ void GameScene::Draw() {
 	// 3Dオブジェクト描画後処理
 	player_->Draw(viewProjection_);
 	Model::PostDraw();
-#pragma endregion
 
-#pragma region 前景スプライト描画
+
+
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(commandList);
 
@@ -72,5 +72,5 @@ void GameScene::Draw() {
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
-#pragma endregion
+
 }
