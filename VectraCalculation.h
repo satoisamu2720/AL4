@@ -2,6 +2,7 @@
 
 #include "Matrix4x4.h"
 #include "Vector3.h"
+
 #include <cmath>
 #include <assert.h>
 
@@ -201,3 +202,6 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 
 	return result;
 }
+
+//スケール，回転，平行移動を合成して行列を計算する
+//worldTransform_.matWorld_ = MakeAffineMatrix
