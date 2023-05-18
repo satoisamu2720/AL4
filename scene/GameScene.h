@@ -1,11 +1,11 @@
 #pragma once
 
 #include "Audio.h"
-#include "DebugCamera.h"
 #include "DirectXCommon.h"
 #include "Input.h"
 #include "Model.h"
 #include "Player.h"
+#include "DebugCamera.h"
 #include "SafeDelete.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
@@ -16,7 +16,7 @@
 /// </summary>
 class GameScene {
 
-	Player* player_ = nullptr;
+	
 
 public: // メンバ関数
 	/// <summary>
@@ -51,14 +51,23 @@ private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
-	DebugCamera* debugCamera_ = nullptr;
+
 	uint32_t textureHandle_ = 0;
-	uint32_t voiceHandle_ = 0;
+	Sprite* sprite_ = nullptr;
+
 	Model* model_ = nullptr;
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
+
+	uint32_t soundDataHandle_ = 0;
+	uint32_t voiceHandle_ = 0;
+
 	float inputFloat3[3] = {0, 0, 0};
 
+	DebugCamera* debugCamera_ = nullptr;
+	Player* player_ = nullptr;
+
+	bool isDebugcameraActive_ = false;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
