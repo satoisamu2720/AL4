@@ -1,6 +1,5 @@
 #pragma once
 #include "PlayerBullet.h"
-#include "assert.h"
 #include "VectraCalculation.h"
 
 
@@ -10,7 +9,7 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position ,const Vecto
 	assert(model);
 	
 	//テクスチャ読み込み
-	texturehandle_ = TextureManager::Load("genshin.png");
+	texturehandle_ = TextureManager::Load("sample.png");
 	model_ = model;
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;

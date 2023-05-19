@@ -9,6 +9,7 @@ GameScene::~GameScene() {
 	delete model_;
 	delete player_;
 	delete debugCamera_;
+	delete enemy_;
 }
 
 void GameScene::Initialize() {
@@ -16,7 +17,7 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	audio_ = Audio::GetInstance();
 	input_ = Input::GetInstance();
-	textureHandle_ = TextureManager::Load("sample.png");
+	textureHandle_ = TextureManager::Load("genshin.png");
 
 	model_ = Model::Create();
 
@@ -24,6 +25,10 @@ void GameScene::Initialize() {
 
 	player_ = new Player();
 	player_->Initialize(model_, textureHandle_);
+
+	enemy_ = new Enemy();
+	Vector3 position = {0, 3, 30};
+	enemy_->Initialize(model_,position);
 
 	debugCamera_ = new DebugCamera(1280, 720);
 	
@@ -37,6 +42,7 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	player_->Update(); 
 	debugCamera_->Update();
+	enemy_->Update();
 
 	//デバックカメラのifdef
 
@@ -93,6 +99,7 @@ void GameScene::Draw() {
 
 	// 3Dオブジェクト描画後処理
 	player_->Draw(viewProjection_);
+	enemy_->Draw(viewProjection_);
 	Model::PostDraw();
 
 
