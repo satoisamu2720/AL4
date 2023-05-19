@@ -51,9 +51,10 @@ void GameScene::Update() {
 		isDebugcameraActive_ = true;
 	} else if (input_->TriggerKey(DIK_LSHIFT) && isDebugcameraActive_ == true) {
 		isDebugcameraActive_ = false;
+		
 	}
     #endif
-
+	
 
 	
 	//カメラ処理
