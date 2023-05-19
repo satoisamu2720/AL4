@@ -1,3 +1,4 @@
+#pragma once
 #include "PlayerBullet.h"
 #include "assert.h"
 #include "VectraCalculation.h"
@@ -8,8 +9,8 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position) {
 	
 	assert(model);
 	
-	//テクスチャ読み込み
-	texturehandle_ = TextureManager::Load("kamata.png");
+	//繝�繧ｯ繧ｹ繝√Ε隱ｭ縺ｿ霎ｼ縺ｿ
+	texturehandle_ = TextureManager::Load("genshin.png");
 	model_ = model;
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
@@ -19,13 +20,12 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position) {
 };
 
 
-void PlayerBullet::Updarte(){
-	worldTransform_.matWorld_ = MakeAffineMatrix(
-	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+void PlayerBullet::Updarte(){ worldTransform_.UpdateMatrix();
+	    
 
 };
 
 
-void PlayerBullet:: Draw(const ViewProjection& viewProjection) {
-	model_->Draw(worldTransform_, viewProjection, texturehandle_);
+void PlayerBullet::Draw(const ViewProjection& view) {
+	model_->Draw(worldTransform_, view, texturehandle_);
 }

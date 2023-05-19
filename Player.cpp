@@ -25,7 +25,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 
 void Player::Update() {
 	
-
+	worldTransform_.TransferMatrix();
 	Vector3 move = {0, 0, 0};
 
 	const float kCharacterSpeed= 1.2f; 
@@ -84,7 +84,7 @@ void Player::Update() {
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
 
-	 worldTransform_.TransferMatrix();
+	 
 	Atack();
 	if (bullet_) {
 		bullet_->Updarte();

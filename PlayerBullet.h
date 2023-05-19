@@ -4,22 +4,22 @@
 class PlayerBullet {
 public:
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
-	/// <param name= "model">ƒ‚ƒfƒ‹</param>
-	/// <param name= "textureHandle">‰ŠúÀ•W</param>
+	/// <param name= "model">ãƒ¢ãƒ‡ãƒ«</param>
+	/// <param name= "textureHandle">åˆæœŸåº§æ¨™</param>
 	void Initialize(Model* model,const Vector3& position);
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Updarte();
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
-	/// <param name= "viewProjection">ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“j</param>
-	void Draw(const ViewProjection& viewProjection);
+	/// <param name= "viewProjection">ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³ï¼‰</param>
+	void Draw(const ViewProjection& view);
 
 	private:
 		WorldTransform worldTransform_;
