@@ -2,13 +2,26 @@
 #include "Player.h"
 #include "VectraCalculation.h"
 
+Player::~Player() {
+	for (PlayerBullet * bullet : bullets_) {
+
+		delete bullet;
+	}
+}
+
 
 void Player::Atack() {
-	if (input_->PushKey(DIK_SPACE)) {
+if (input_->PushKey(DIK_SPACE)) {
+	if (bullet_) {
+
+		delete bullet_;
+		bullet_ = nullptr;
+	}
+	
 		PlayerBullet* newBulllet = new PlayerBullet();
 		newBulllet->Initialize(model_, worldTransform_.translation_);
 		// 弾を登録する
-		bullet_ = newBulllet;
+		bullets_. push_back(newBulllet);
 	};
 }
 
@@ -89,13 +102,16 @@ void Player::Update() {
 	if (bullet_) {
 		bullet_->Updarte();
 	}
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Updarte();
+	}
 };
 
 void Player::Draw(ViewProjection view) { 
 
 	model_->Draw(worldTransform_, view, textureHandle_);
-	if (bullet_) {
-		bullet_->Draw(view);
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Draw(view);
 	}
 
 };
