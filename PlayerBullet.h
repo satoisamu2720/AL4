@@ -8,7 +8,7 @@ public:
 	/// </summary>
 	/// <param name= "model">モデル</param>
 	/// <param name= "textureHandle">初期座標</param>
-	void Initialize(Model* model,const Vector3& position);
+	void Initialize(Model* model,const Vector3& position,const Vector3& velocity);
 
 	/// <summary>
 	/// 更新
@@ -22,6 +22,7 @@ public:
 	void Draw(const ViewProjection& view);
 
 	private:
+	Vector3 velocity_;
 		WorldTransform worldTransform_;
 		Model* model_;
 		uint32_t texturehandle_;

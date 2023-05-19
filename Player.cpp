@@ -17,9 +17,11 @@ if (input_->PushKey(DIK_SPACE)) {
 		delete bullet_;
 		bullet_ = nullptr;
 	}
-	
+	const float kBulletSpeed = 1.0f;
+	Vector3 velcity(0, 0, kBulletSpeed);
+	velcity = TransformNormal(velcity, worldTransform_.matWorld_);
 		PlayerBullet* newBulllet = new PlayerBullet();
-		newBulllet->Initialize(model_, worldTransform_.translation_);
+		newBulllet->Initialize(model_, worldTransform_.translation_,velcity);
 		// 弾を登録する
 		bullets_. push_back(newBulllet);
 	};
