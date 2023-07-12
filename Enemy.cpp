@@ -3,9 +3,9 @@
 #include "VectraCalculation.h"
  
 Enemy::~Enemy() {
-	for (EnemyBullet* bullet : bullets_) {
+	for (EnemyBullet* enemybullet : enemybullets_) {
 
-		delete bullet;
+		delete enemybullet;
 	}
 }
 
@@ -18,18 +18,20 @@ void Enemy::Initialize(Model* model, const Vector3& position,const Vector3& velo
 	velocity_ = velocity;
 };
 void Enemy::Atack() {
-	if (bullet_) {
+	if (input_->PushKey(DIK_L)) {
+		if (enemybullet_) {
 
-	delete bullet_;
-	bullet_ = nullptr;
-     }
-	const float kBulletSpeed = 1.0f;
-	Vector3 velcity(0, 0, kBulletSpeed);
-	velcity = TransformNormal(velcity, worldTransform_.matWorld_);
-	EnemyBullet* newBulllet = new EnemyBullet();
-	newBulllet->Initialize(model_, worldTransform_.translation_, velcity);
-	// 弾を登録する
-	bullets_.push_back(newBulllet);
+			delete enemybullet_;
+			enemybullet_ = nullptr;
+		}
+		const float kBulletSpeed = -2.0f;
+		Vector3 velcity(0, 0, kBulletSpeed);
+		velcity = TransformNormal(velcity, worldTransform_.matWorld_);
+		EnemyBullet* newBulllet = new EnemyBullet();
+		newBulllet->Initialize(model_, worldTransform_.translation_, velcity);
+		// 弾を登録する
+		enemybullets_.push_back(newBulllet);
+	};
 }
 
 
@@ -60,13 +62,19 @@ void Enemy::Update() {
 		break;
 	}
 	
-
+	Atack();
+	if (enemybullet_) {
+		enemybullet_->Updarte();
+	}
+	for (EnemyBullet* bullet : enemybullets_) {
+		bullet->Updarte();
+	}
 	
 };
-//void Enemy::Approach
-    ///
-///
-///
+
 void Enemy::Draw(const ViewProjection view){ 
 	model_->Draw(worldTransform_, view, textureHandle_); 
+	for (EnemyBullet* bullet : enemybullets_) {
+		bullet->Draw(view);
+	}
 };

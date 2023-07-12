@@ -4,6 +4,7 @@
 #include "TextureManager.h"
 #include "WorldTransform.h"
 #include "EnemyBullet.h"
+#include "Input.h"
 #include "assert.h"
 
 
@@ -45,6 +46,7 @@ public:
 	uint32_t textureHandle_;
 	Phase phase_ = Phase ::Approach;
 	Vector3 velocity_;
-	EnemyBullet* bullet_ = nullptr;
-	std::list<EnemyBullet*> bullets_;
+	Input* input_ = nullptr;
+	EnemyBullet* enemybullet_ = nullptr;
+	std::list<EnemyBullet*> enemybullets_;
 };
