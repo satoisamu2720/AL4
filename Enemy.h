@@ -3,6 +3,7 @@
 #include "ImGuiManager.h"
 #include "TextureManager.h"
 #include "WorldTransform.h"
+#include "EnemyBullet.h"
 #include "assert.h"
 
 
@@ -26,6 +27,10 @@ public:
 	///
 	///
 	void Draw(ViewProjection view);
+	///
+	/// 
+	/// 
+	void Atack();
 
 	/// <summary>
 	/// 行動フェーズ
@@ -34,12 +39,12 @@ public:
 		Approach, // 接近する
 		Leave,    // 離脱する
 	};
-
+	~Enemy();
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
 	uint32_t textureHandle_;
-	float enemyInputFloat[3]{0, 0, 0};
 	Phase phase_ = Phase ::Approach;
 	Vector3 velocity_;
-	
+	EnemyBullet* bullet_ = nullptr;
+	std::list<EnemyBullet*> bullets_;
 };

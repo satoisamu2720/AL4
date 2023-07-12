@@ -1,10 +1,14 @@
 #pragma once
 #include "Enemy.h"
 #include "VectraCalculation.h"
+ 
+Enemy::~Enemy() {
+	for (EnemyBullet* bullet : bullets_) {
 
-///
-///
-/// 
+		delete bullet;
+	}
+}
+
 void Enemy::Initialize(Model* model, const Vector3& position,const Vector3& velocity) {
 	assert(model);
 	model_ = model;
@@ -13,9 +17,21 @@ void Enemy::Initialize(Model* model, const Vector3& position,const Vector3& velo
 	worldTransform_.translation_ = position;
 	velocity_ = velocity;
 };
+void Enemy::Atack() {
+	if (bullet_) {
 
-	
-	
+	delete bullet_;
+	bullet_ = nullptr;
+     }
+	const float kBulletSpeed = 1.0f;
+	Vector3 velcity(0, 0, kBulletSpeed);
+	velcity = TransformNormal(velcity, worldTransform_.matWorld_);
+	EnemyBullet* newBulllet = new EnemyBullet();
+	newBulllet->Initialize(model_, worldTransform_.translation_, velcity);
+	// 弾を登録する
+	bullets_.push_back(newBulllet);
+}
+
 
 ///
 ///
@@ -33,10 +49,6 @@ void Enemy::Update() {
 		worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
 		worldTransform_.translation_.z -= kCharacterSpeed;
 
-		//規定の位置に到達したら離脱
-		if (worldTransform_.translation_.z < 0.0f) {
-			phase_ = Phase::Leave;
-		}
 		break;
 	case Phase::Leave:
 		
