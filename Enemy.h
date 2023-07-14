@@ -31,7 +31,7 @@ public:
 	///
 	/// 
 	/// 
-	void Atack();
+	void Fire();
 
 	/// <summary>
 	/// 行動フェーズ

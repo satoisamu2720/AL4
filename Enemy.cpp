@@ -6,6 +6,7 @@ Enemy::~Enemy() {
 	for (EnemyBullet* enemybullet : enemybullets_) {
 
 		delete enemybullet;
+		delete enemybullet_;
 	}
 }
 
@@ -17,21 +18,18 @@ void Enemy::Initialize(Model* model, const Vector3& position,const Vector3& velo
 	worldTransform_.translation_ = position;
 	velocity_ = velocity;
 };
-void Enemy::Atack() {
-	if (input_->PushKey(DIK_L)) {
-		if (enemybullet_) {
+void Enemy::Fire() {
+	enemybullet_ = nullptr;
 
-			delete enemybullet_;
-			enemybullet_ = nullptr;
-		}
-		const float kBulletSpeed = -2.0f;
-		Vector3 velcity(0, 0, kBulletSpeed);
-		velcity = TransformNormal(velcity, worldTransform_.matWorld_);
-		EnemyBullet* newBulllet = new EnemyBullet();
-		newBulllet->Initialize(model_, worldTransform_.translation_, velcity);
-		// 弾を登録する
-		enemybullets_.push_back(newBulllet);
-	};
+	const float kBulletSpeed = -0.4f;
+	Vector3 velcity(0, 0, kBulletSpeed);
+	velcity = TransformNormal(velcity, worldTransform_.matWorld_);
+	EnemyBullet* newBulllet = new EnemyBullet();
+	newBulllet->Initialize(model_, worldTransform_.translation_, velcity);
+	// 弾を登録する
+	enemybullets_.push_back(newBulllet);
+	
+		
 }
 
 
@@ -62,7 +60,7 @@ void Enemy::Update() {
 		break;
 	}
 	
-	Atack();
+	Fire();
 	if (enemybullet_) {
 		enemybullet_->Updarte();
 	}
