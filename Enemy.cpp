@@ -1,16 +1,14 @@
 #pragma once
 #include "Enemy.h"
 #include "VectraCalculation.h"
- 
-Enemy::~Enemy() {
-	for (EnemyBullet* enemybullet : enemybullets_) {
 
-		delete enemybullet;
-		delete enemybullet_;
+Enemy::~Enemy() {
+	for (EnemyBullet* bullet : bullets_) {
+
+		delete bullet;
 	}
 }
-
-void Enemy::Initialize(Model* model, const Vector3& position,const Vector3& velocity) {
+void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
 	assert(model);
 	model_ = model;
 	textureHandle_ = TextureManager::Load("Enemy.png");
@@ -18,61 +16,46 @@ void Enemy::Initialize(Model* model, const Vector3& position,const Vector3& velo
 	worldTransform_.translation_ = position;
 	velocity_ = velocity;
 };
-void Enemy::Fire() {
-	enemybullet_ = nullptr;
 
-	const float kBulletSpeed = -0.4f;
+void Enemy::Fire() {
+	// 弾を生成し，初期化
+	if (bullet_) {
+		delete bullet_;
+		bullet_ = nullptr;
+	}
+	EnemyBullet* newBullet = new EnemyBullet();
+	const float kBulletSpeed = -1.0f;
 	Vector3 velcity(0, 0, kBulletSpeed);
 	velcity = TransformNormal(velcity, worldTransform_.matWorld_);
-	EnemyBullet* newBulllet = new EnemyBullet();
-	newBulllet->Initialize(model_, worldTransform_.translation_, velcity);
+	newBullet->Initialize(model_, worldTransform_.translation_, velcity);
+
 	// 弾を登録する
-	enemybullets_.push_back(newBulllet);
-	
-		
+	bullets_.push_back(newBullet);
 }
 
-
-///
-///
-///
 void Enemy::Update() {
 	worldTransform_.UpdateMatrix();
-	
 	const float kCharacterSpeed = 0.2f;
-	
-	switch (phase_) {
-	case Phase::Approach:
-	
-		
-		//移動（ベクトルを加算）
-		worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
-		worldTransform_.translation_.z -= kCharacterSpeed;
+	// 移動（ベクトルを加算）
+	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
+	worldTransform_.translation_.z -= kCharacterSpeed;
+	startTimer--;
+	if (startTimer <= 5) {
 
-		break;
-	case Phase::Leave:
-		
-		//移動（ベクトルを加算）
-		worldTransform_.translation_ = Add(worldTransform_.translation_, {-0.5f, 0.5f, 0.0f});
-		
-		break;
-	default:
-		break;
+		Fire();
+		Approach();
+
+		startTimer = kFreInterval;
 	}
-	
-	Fire();
-	if (enemybullet_) {
-		enemybullet_->Updarte();
-	}
-	for (EnemyBullet* bullet : enemybullets_) {
+	for (EnemyBullet* bullet : bullets_) {
 		bullet->Updarte();
 	}
-	
 };
+void Enemy::Approach() { startTimer = 0; }
 
-void Enemy::Draw(const ViewProjection view){ 
-	model_->Draw(worldTransform_, view, textureHandle_); 
-	for (EnemyBullet* bullet : enemybullets_) {
-		bullet->Draw(view);
+void Enemy::Draw(const ViewProjection viewProjection) {
+	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	for (EnemyBullet* bullet : bullets_) {
+		bullet->Draw(viewProjection);
 	}
 };

@@ -5,7 +5,7 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 	assert(model);
 
 	// テクスチャ読み込み
-	texturehandle_ = TextureManager::Load("sample.png");
+	texturehandle_ = TextureManager::Load("klee.png");
 	model_ = model;
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
