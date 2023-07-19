@@ -6,6 +6,7 @@
 #include "WorldTransform.h"
 #include "assert.h"
 #include <list>
+class Player;
 
 class Enemy {
 public:
@@ -37,6 +38,13 @@ public:
 	///
 	void Approach();
 
+	///
+	///
+	/// 
+	void SetPlayer(Player* player) { player_ = player; }
+
+	Vector3 GetWorldPosition();
+
 	/// <summary>
 	/// 行動フェーズ
 	/// </summary>
@@ -57,6 +65,8 @@ public:
 	EnemyBullet* bullet_ = nullptr;
 	std::list<EnemyBullet*> bullets_;
 	static const int kFreInterval = 60;
+	Player* player_ = nullptr;
+	//Vector3 Normalise;
 
 private:
 	int32_t startTimer = 0;

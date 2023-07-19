@@ -211,5 +211,25 @@ Vector3 inline TransformNormal(const Vector3& v, const Matrix4x4& m) {
 	};
 	return result;
 }
+
+ static Vector3 Subtract(const Vector3& r1, const Vector3& r2) {
+	Vector3 result;
+	{
+		result.x = r1.x - r2.x;
+		result.y = r1.y - r2.y;
+		result.z = r1.z - r2.z;
+
+		return result;
+	}
+}
+
+static Vector3 Normalise(const Vector3& v) {
+	float mag = sqrtf((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
+	if (mag != 0) {
+		return {v.x / mag, v.y / mag, v.z / mag};
+	}
+	return v;
+}
+
     //スケール，回転，平行移動を合成して行列を計算する
 //worldTransform_.matWorld_ = MakeAffineMatrix

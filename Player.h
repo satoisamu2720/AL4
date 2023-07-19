@@ -32,7 +32,10 @@ public:
 	///
 	///
 	void Atack();
-/// <summary>
+
+	Vector3  GetWorldPosition();
+
+	/// <summary>
 /// 
 /// </summary>
 	~Player();
@@ -43,4 +46,5 @@ public:
 	PlayerBullet* bullet_ = nullptr;
 	float inputFloat[3]{0, 0, 0};
 	std::list<PlayerBullet*> bullets_;
+	
 };

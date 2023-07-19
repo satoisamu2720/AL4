@@ -27,9 +27,10 @@ void GameScene::Initialize() {
 	player_->Initialize(model_, textureHandle_);
 
 	enemy_ = new Enemy();
+	enemy_->SetPlayer(player_);
 	Vector3 position = {0, 3, 30};
 	enemy_->Initialize(model_, position, velocity_);
-
+	
 	debugCamera_ = new DebugCamera(1280, 720);
 	
 	//軸方向表示の表示を有効にする

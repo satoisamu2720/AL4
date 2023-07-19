@@ -1,5 +1,6 @@
 #pragma once
 #include "Enemy.h"
+#include "Player.h"
 #include "VectraCalculation.h"
 
 Enemy::~Enemy() {
@@ -7,6 +8,7 @@ Enemy::~Enemy() {
 
 		delete bullet;
 	}
+	
 }
 void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
 	assert(model);
@@ -15,18 +17,23 @@ void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& vel
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 	velocity_ = velocity;
+	
 };
 
 void Enemy::Fire() {
 	// 弾を生成し，初期化
-	if (bullet_) {
-		delete bullet_;
-		bullet_ = nullptr;
-	}
+	
+
+	const float kBulletSpeed = 1.0f;
+	Vector3 playerPos = player_->GetWorldPosition();
+	Vector3 enemyPos = this->GetWorldPosition();
+    Vector3 velcity = Subtract(playerPos, enemyPos);
+	velcity = Normalise(velcity);
+	velcity.x *= kBulletSpeed;
+	velcity.y *= kBulletSpeed;
+	velcity.z *= kBulletSpeed;
+
 	EnemyBullet* newBullet = new EnemyBullet();
-	const float kBulletSpeed = -1.0f;
-	Vector3 velcity(0, 0, kBulletSpeed);
-	velcity = TransformNormal(velcity, worldTransform_.matWorld_);
 	newBullet->Initialize(model_, worldTransform_.translation_, velcity);
 
 	// 弾を登録する
@@ -35,7 +42,7 @@ void Enemy::Fire() {
 
 void Enemy::Update() {
 	worldTransform_.UpdateMatrix();
-	const float kCharacterSpeed = 0.2f;
+	const float kCharacterSpeed = 0.1f;
 	// 移動（ベクトルを加算）
 	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
 	worldTransform_.translation_.z -= kCharacterSpeed;
@@ -59,3 +66,14 @@ void Enemy::Draw(const ViewProjection viewProjection) {
 		bullet->Draw(viewProjection);
 	}
 };
+
+Vector3 Enemy::GetWorldPosition() {
+
+	Vector3 worldPos;
+
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
+}
