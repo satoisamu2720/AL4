@@ -21,6 +21,10 @@ public:
 	/// </summary>
 	/// <param name= "viewProjection">ビュープロジェクション）</param>
 	void Draw(const ViewProjection& view);
+	/// <summary>
+	/// 
+	/// </summary>
+	void OnCollision();
 
 	private:
 	Vector3 velocity_;

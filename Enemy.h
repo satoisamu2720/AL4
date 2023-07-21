@@ -43,6 +43,12 @@ public:
 	/// 
 	void SetPlayer(Player* player) { player_ = player; }
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
+	void OnCollision();
+
 	Vector3 GetWorldPosition();
 
 	/// <summary>

@@ -32,7 +32,12 @@ public:
 	///
 	///
 	void Atack();
-
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
+	void OnCollision();
+	
 	Vector3  GetWorldPosition();
 
 	/// <summary>

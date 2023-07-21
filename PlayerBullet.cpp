@@ -30,3 +30,7 @@ worldTransform_.translation_.z += velocity_.z;
 void PlayerBullet::Draw(const ViewProjection& view) {
 	model_->Draw(worldTransform_, view, texturehandle_);
 }
+
+void PlayerBullet::OnCollision() {
+
+}

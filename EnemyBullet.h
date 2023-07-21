@@ -20,7 +20,10 @@ class EnemyBullet {
 	/// </summary>
 	/// <param name= "viewProjection">ビュープロジェクション）</param>
 	void Draw(const ViewProjection& viewProjetion);
-
+/// <summary>
+/// 
+/// </summary>
+	void OnCollision();
 private:
 	Vector3 velocity_;
 	WorldTransform worldTransform_;
