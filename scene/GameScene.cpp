@@ -44,9 +44,10 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 	player_->Update(); 
-	debugCamera_->Update();
 	enemy_->Update();
+	CheckAllCollisions();
 
+	debugCamera_->Update();
 	//デバックカメラのifdef
 
 	#ifdef _DEBUG
@@ -71,7 +72,6 @@ void GameScene::Update() {
 		//ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
-	CheckAllCollisions();
 }
 
 	void GameScene::Draw() {
