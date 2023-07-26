@@ -125,6 +125,9 @@ void Player::Draw(ViewProjection view) {
 
 };
 
+void Player::OnCollision() { isDead_ = false; }
+
+
 Vector3 Player::GetWorldPosition() {
 
 	Vector3 worldPos;

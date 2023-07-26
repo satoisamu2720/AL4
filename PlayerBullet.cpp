@@ -28,9 +28,22 @@ worldTransform_.translation_.z += velocity_.z;
 
 
 void PlayerBullet::Draw(const ViewProjection& view) {
+
 	model_->Draw(worldTransform_, view, texturehandle_);
+	
 }
 
 void PlayerBullet::OnCollision() {
+	deiFlag = false;
+}
 
+Vector3 PlayerBullet::GetWorldPosition() {
+
+	Vector3 worldPos;
+
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
 }

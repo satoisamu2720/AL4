@@ -230,6 +230,14 @@ static Vector3 Normalise(const Vector3& v) {
 	}
 	return v;
 }
+//static Vector3 Collide(const Vector3& p1, const Vector3& p2, float r1, float r2) {
+//	Vector3 L = {
+//	    (p2.x - p1.x) * (p2.x - p1.x),
+//		(p2.y - p2.y) * (p2.y - p2.y),
+//	    (p1.z - p2.z) * (p1.z - p2.z)};
+//	Vector3 collide = L  <= (r1 + r2) * (r1 + r2);
+//	return collide;
+//}
 
     //スケール，回転，平行移動を合成して行列を計算する
 //worldTransform_.matWorld_ = MakeAffineMatrix

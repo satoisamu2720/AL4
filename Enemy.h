@@ -73,6 +73,7 @@ public:
 	static const int kFreInterval = 60;
 	Player* player_ = nullptr;
 	//Vector3 Normalise;
+	const std::list<EnemyBullet*>& GetBullets() const { return bullets_; }
 
 private:
 	int32_t startTimer = 0;

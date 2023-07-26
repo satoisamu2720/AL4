@@ -26,9 +26,12 @@ public:
 	/// </summary>
 	void OnCollision();
 
+	Vector3 GetWorldPosition();
+
 	private:
 	Vector3 velocity_;
 		WorldTransform worldTransform_;
 		Model* model_;
 		uint32_t texturehandle_;
+	    static const int32_t kLifeTime = 60 * 5;
 };

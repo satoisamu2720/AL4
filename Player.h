@@ -51,5 +51,7 @@ public:
 	PlayerBullet* bullet_ = nullptr;
 	float inputFloat[3]{0, 0, 0};
 	std::list<PlayerBullet*> bullets_;
+
+	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
 	
 };

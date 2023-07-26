@@ -46,6 +46,12 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 
+	/// </summary>
+	void CheckAllCollisions();
+
+
 private: // メンバ変数
 	// テクスチャハンドル
 

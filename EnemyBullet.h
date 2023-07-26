@@ -20,7 +20,9 @@ class EnemyBullet {
 	/// </summary>
 	/// <param name= "viewProjection">ビュープロジェクション）</param>
 	void Draw(const ViewProjection& viewProjetion);
-/// <summary>
+
+	Vector3 GetWorldPosition();
+	/// <summary>
 /// 
 /// </summary>
 	void OnCollision();
@@ -29,4 +31,5 @@ private:
 	WorldTransform worldTransform_;
 	Model* model_;
 	uint32_t texturehandle_;
+	int deiFlag;
 };

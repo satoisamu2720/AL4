@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 #include <cassert>
 #include "AxisIndicator.h"
+#include "VectraCalculation.h"
 
 GameScene::GameScene() {}
 
@@ -72,7 +73,7 @@ void GameScene::Update() {
 
 }
 
-void GameScene::Draw() {
+	void GameScene::Draw() {
 
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
@@ -119,3 +120,45 @@ void GameScene::Draw() {
 
 
 }
+
+	void GameScene::CheckAllCollisions() {
+	Vector3 posA, posB;
+	float enemyBulletRadius = 0.5f;
+	float playerBulletRadius = 0.5f;
+	float playerRadius = 1.0f;
+	float enemyRadius = 1.0f;
+
+	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
+
+	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+#pragma region
+	posA = player_->GetWorldPosition();
+	for (EnemyBullet* bullet : enemyBullets) {
+		posB = bullet->GetWorldPosition();
+		Vector3 collide = {
+		    (posB.x - posA.x) * (posB.x - posA.x), (posB.y - posA.y) * (posB.y - posA.y),
+		    (posB.z - posA.z) * (posB.z - posA.z)};
+		if (collide.x + collide.y + collide.z <= 
+			(playerRadius+enemyBulletRadius)*( enemyRadius+playerBulletRadius)){
+			player_->OnCollision();
+			bullet->OnCollision();
+		}
+	}
+#pragma endregion
+#pragma region
+	posA = enemy_->GetWorldPosition();
+	for (PlayerBullet* bullet : playerBullets) {
+		posB = bullet->GetWorldPosition();
+
+		Vector3 Distance = {
+		    (posB.x - posA.x) * (posB.x - posA.x), (posB.y - posA.y) * (posB.y - posA.y),
+		    (posB.z - posA.z) * (posB.z - posA.z)};
+		if (Distance.x + Distance.y + Distance.z <=
+		    (enemyRadius + playerBulletRadius) * (enemyRadius + playerBulletRadius)) {
+			enemy_->OnCollision();
+			bullet->OnCollision();
+		}
+	}
+#pragma endregion
+
+    }

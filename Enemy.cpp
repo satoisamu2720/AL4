@@ -24,7 +24,7 @@ void Enemy::Fire() {
 	// 弾を生成し，初期化
 	
 
-	const float kBulletSpeed = 1.0f;
+	const float kBulletSpeed = 0.6f;
 	Vector3 playerPos = player_->GetWorldPosition();
 	Vector3 enemyPos = this->GetWorldPosition();
     Vector3 velcity = Subtract(playerPos, enemyPos);
@@ -42,12 +42,12 @@ void Enemy::Fire() {
 
 void Enemy::Update() {
 	worldTransform_.UpdateMatrix();
-	const float kCharacterSpeed = 0.1f;
+	const float kCharacterSpeed = 0.0f;
 	// 移動（ベクトルを加算）
 	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
 	worldTransform_.translation_.z -= kCharacterSpeed;
 	startTimer--;
-	if (startTimer <= 5) {
+	if (startTimer <= 0.01) {
 
 		Fire();
 		Approach();
@@ -66,6 +66,9 @@ void Enemy::Draw(const ViewProjection viewProjection) {
 		bullet->Draw(viewProjection);
 	}
 };
+
+void Enemy::OnCollision() {}
+
 
 Vector3 Enemy::GetWorldPosition() {
 
