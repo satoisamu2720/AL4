@@ -28,10 +28,15 @@ public:
 
 	Vector3 GetWorldPosition();
 
+	bool IsDead() const { return isDead_; }
+
 	private:
 	Vector3 velocity_;
 		WorldTransform worldTransform_;
 		Model* model_;
 		uint32_t texturehandle_;
-	    static const int32_t kLifeTime = 60 * 5;
+	    static const int32_t kLifeTime = 60 * 1;
+	    int32_t deathTimer_ = kLifeTime;
+	    bool isDead_ = false;
+
 };

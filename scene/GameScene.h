@@ -74,6 +74,7 @@ private: // メンバ変数
 	DebugCamera* debugCamera_ = nullptr;
 	Player* player_ = nullptr;
 	Enemy* enemy_ = nullptr;
+	PlayerBullet* playerbullet_ = nullptr;
 	Vector3 velocity_;
 	bool isDebugcameraActive_ = false;
 	/// <summary>

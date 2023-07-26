@@ -11,11 +11,13 @@ Player::~Player() {
 
 
 void Player::Atack() {
-if (input_->PushKey(DIK_SPACE)) {
+	
+	if (input_->PushKey(DIK_SPACE) ) {
+		StopTimer--;
 	if (bullet_) {
-
 		delete bullet_;
 		bullet_ = nullptr;
+		
 	}
 	const float kBulletSpeed = 1.0f;
 	Vector3 velcity(0, 0, kBulletSpeed);
@@ -25,6 +27,10 @@ if (input_->PushKey(DIK_SPACE)) {
 		// 弾を登録する
 		bullets_. push_back(newBulllet);
 	};
+	if (StopTimer == -2) {
+		StopTimer = 0;
+	}
+	
 }
 
 void Player::Initialize(Model* model, uint32_t textureHandle) {
@@ -39,11 +45,18 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 };
 
 void Player::Update() {
-	
+
+	bullets_.remove_if([](PlayerBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
 	worldTransform_.TransferMatrix();
 	Vector3 move = {0, 0, 0};
 
-	const float kCharacterSpeed= 1.2f; 
+	const float kCharacterSpeed = 1.2f;
 
 	const float kRotSpeed = 0.2f;
 	//
@@ -59,7 +72,7 @@ void Player::Update() {
 		move.z += kCharacterSpeed;
 		inputFloat[2] = worldTransform_.translation_.z;
 	}
-	 // 押した方向で移動ベクトルを変更（左右）
+	// 押した方向で移動ベクトルを変更（左右）
 	if (input_->PushKey(DIK_LEFT)) {
 		move.x -= kCharacterSpeed;
 		inputFloat[0] = worldTransform_.translation_.x;
@@ -77,17 +90,15 @@ void Player::Update() {
 		inputFloat[1] = worldTransform_.translation_.y;
 	}
 
-
-	 worldTransform_.translation_.x = inputFloat[0];
-	 worldTransform_.translation_.y = inputFloat[1];
-	 worldTransform_.translation_.z = inputFloat[2];
+	worldTransform_.translation_.x = inputFloat[0];
+	worldTransform_.translation_.y = inputFloat[1];
+	worldTransform_.translation_.z = inputFloat[2];
 
 	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
 
 	worldTransform_.matWorld_ = MakeAffineMatrix(
 	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
-	 
-	
+
 	// ImGuiスライダー
 	ImGui::Begin("PlayerDebug");
 	ImGui::Text("DebugCamera Toggle : LEFT SHIFT");
@@ -104,16 +115,18 @@ void Player::Update() {
 	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
-
-
-	 
-	Atack();
+	if (StopTimer >= -1) {
+		Atack();
+	}
+	
 	if (bullet_) {
 		bullet_->Updarte();
 	}
+
 	for (PlayerBullet* bullet : bullets_) {
 		bullet->Updarte();
 	}
+	
 };
 
 void Player::Draw(ViewProjection view) { 
@@ -125,7 +138,7 @@ void Player::Draw(ViewProjection view) {
 
 };
 
-void Player::OnCollision() { isDead_ = false; }
+void Player::OnCollision() {  }
 
 
 Vector3 Player::GetWorldPosition() {

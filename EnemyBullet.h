@@ -22,6 +22,8 @@ class EnemyBullet {
 	void Draw(const ViewProjection& viewProjetion);
 
 	Vector3 GetWorldPosition();
+
+	bool IsDead() const { return isDead_; }
 	/// <summary>
 /// 
 /// </summary>
@@ -31,5 +33,8 @@ private:
 	WorldTransform worldTransform_;
 	Model* model_;
 	uint32_t texturehandle_;
-	int deiFlag;
+	
+	static const int32_t kLifeTime = 60 *2 ;
+	int32_t deathTime_ = kLifeTime;
+	bool isDead_ = false;
 };

@@ -14,11 +14,16 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 };
 
 void EnemyBullet::Updarte() {
+
 	worldTransform_.UpdateMatrix();
 
 	worldTransform_.translation_.x += velocity_.x;
 	worldTransform_.translation_.y += velocity_.y;
 	worldTransform_.translation_.z += velocity_.z;
+	
+	if (--deathTime_ <= 0) {
+		isDead_ = true;
+	}
 };
 
 void EnemyBullet::Draw(const ViewProjection& view) {
@@ -26,7 +31,7 @@ void EnemyBullet::Draw(const ViewProjection& view) {
 }
 
 void EnemyBullet::OnCollision() { 
-	deiFlag = false; 
+	isDead_ = true; 
 }
 
 Vector3 EnemyBullet::GetWorldPosition() {

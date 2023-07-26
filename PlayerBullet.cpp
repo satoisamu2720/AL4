@@ -24,6 +24,10 @@ void PlayerBullet::Updarte(){ worldTransform_.UpdateMatrix();
 worldTransform_.translation_.x += velocity_.x;
 	worldTransform_.translation_.y += velocity_.y;
 worldTransform_.translation_.z += velocity_.z;
+
+if (--deathTimer_ <= 0) {
+	isDead_ = true;
+	}
 };
 
 
@@ -34,7 +38,7 @@ void PlayerBullet::Draw(const ViewProjection& view) {
 }
 
 void PlayerBullet::OnCollision() {
-	deiFlag = false;
+	isDead_ = true;
 }
 
 Vector3 PlayerBullet::GetWorldPosition() {

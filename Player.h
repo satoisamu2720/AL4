@@ -40,6 +40,7 @@ public:
 	
 	Vector3  GetWorldPosition();
 
+	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
 	/// <summary>
 /// 
 /// </summary>
@@ -52,6 +53,8 @@ public:
 	float inputFloat[3]{0, 0, 0};
 	std::list<PlayerBullet*> bullets_;
 
-	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
+
+	int32_t StopTimer = 0;
+	
 	
 };

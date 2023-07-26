@@ -41,6 +41,14 @@ void Enemy::Fire() {
 }
 
 void Enemy::Update() {
+
+	bullets_.remove_if([](EnemyBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
 	worldTransform_.UpdateMatrix();
 	const float kCharacterSpeed = 0.0f;
 	// 移動（ベクトルを加算）
