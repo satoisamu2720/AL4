@@ -7,10 +7,11 @@
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
-	delete model_;
 	delete player_;
-	delete debugCamera_;
 	delete enemy_;
+	delete model_;
+	delete modelSkydome_;
+	delete debugCamera_;
 }
 
 void GameScene::Initialize() {
@@ -21,6 +22,7 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("genshin.png");
 
 	model_ = Model::Create();
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	viewProjection_.Initialize();
 
@@ -34,7 +36,9 @@ void GameScene::Initialize() {
 	enemy_->Initialize(model_, position, velocity_);
 	
 	debugCamera_ = new DebugCamera(1280, 720);
-	
+	skydome_ = new Skydome();
+	skydome_->Initialize();
+
 	//軸方向表示の表示を有効にする
 	AxisIndicator::GetInstance()->SetVisible(true);
 	//軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
@@ -44,8 +48,12 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 	player_->Update(); 
-	debugCamera_->Update();
 	enemy_->Update();
+	CheckAllCollisions();
+
+	skydome_->Update();
+
+	debugCamera_->Update();
 
 	//デバックカメラのifdef
 
@@ -71,7 +79,6 @@ void GameScene::Update() {
 		//ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
-	CheckAllCollisions();
 }
 
 	void GameScene::Draw() {
@@ -104,6 +111,8 @@ void GameScene::Update() {
 	// 3Dオブジェクト描画後処理
 	player_->Draw(viewProjection_);
 	enemy_->Draw(viewProjection_);
+
+	skydome_->Draw(viewProjection_);
 	Model::PostDraw();
 
 
