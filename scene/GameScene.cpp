@@ -7,7 +7,6 @@
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
-	delete model_;
 	delete player_;
 	delete enemy_;
 	delete modelSkydome_;
@@ -24,6 +23,8 @@ void GameScene::Initialize() {
 	model_ = Model::Create();
 	modelSkydome_->Model::CreateFromOBJ("sky", true);
 
+	
+	viewProjection_.farZ= {1000000.0f};
 	viewProjection_.Initialize();
 
 	player_ = new Player();
@@ -80,6 +81,7 @@ void GameScene::Update() {
 		//ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
+	CheckAllCollisions();
 }
 
 	void GameScene::Draw() {

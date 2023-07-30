@@ -4,6 +4,7 @@
 #include "WorldTransform.h"
 class Skydome {
 public:
+	
 	void Initialize(Model* model);
 
 	void Update();
@@ -12,6 +13,6 @@ public:
 
 public:
 	WorldTransform worldTransfome_;
-	Model* model_ = nullptr;
+	    Model* model_ = nullptr;
 	uint32_t textureHandle_ = 0u;
 };

@@ -1,6 +1,6 @@
 #include "Skydome.h"
 
-void Skydome::Initialize(Model* model) {
+void Skydome::Initialize(Model* model) { 
 	assert(model);
 	model_ = model;
 	worldTransfome_.Initialize();
@@ -8,7 +8,8 @@ void Skydome::Initialize(Model* model) {
 	
 }
 
-void Skydome::Update() {
+void Skydome::Update() { 
+	
 }
 
 void Skydome::Draw(ViewProjection& view) { 

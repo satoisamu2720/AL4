@@ -64,8 +64,8 @@ private: // メンバ変数
 	Sprite* sprite_ = nullptr;
 
 	Model* model_ = nullptr;
-	Model* modelSkydome_ = nullptr;
-	Skydome* skydome_ = nullptr;
+	
+	
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 
@@ -77,9 +77,13 @@ private: // メンバ変数
 	DebugCamera* debugCamera_ = nullptr;
 	Player* player_ = nullptr;
 	Enemy* enemy_ = nullptr;
+	Skydome* skydome_ = nullptr;
+	Model* modelSkydome_ = nullptr;
+	
 	PlayerBullet* playerbullet_ = nullptr;
 	Vector3 velocity_;
 	bool isDebugcameraActive_ = false;
+
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
