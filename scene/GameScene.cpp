@@ -22,8 +22,10 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("genshin.png");
 
 	model_ = Model::Create();
-	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	modelSkydome_ = Model::CreateFromOBJ("sky",true);
 
+	
+	viewProjection_.farZ= {1000000.0f};
 	viewProjection_.Initialize();
 
 	player_ = new Player();
@@ -37,7 +39,7 @@ void GameScene::Initialize() {
 	
 	debugCamera_ = new DebugCamera(1280, 720);
 	skydome_ = new Skydome();
-	skydome_->Initialize();
+	skydome_->Initialize(modelSkydome_);
 
 	//軸方向表示の表示を有効にする
 	AxisIndicator::GetInstance()->SetVisible(true);
