@@ -9,8 +9,9 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete model_;
 	delete player_;
-	delete debugCamera_;
 	delete enemy_;
+	delete modelSkydome_;
+	delete debugCamera_;
 }
 
 void GameScene::Initialize() {
@@ -32,7 +33,12 @@ void GameScene::Initialize() {
 	enemy_->SetPlayer(player_);
 	Vector3 position = {0, 3, 30};
 	enemy_->Initialize(model_, position, velocity_);
+
+	modelSkydome_->Model::CreateFromOBJ("skydome", true);
+	skydome_ = new Skydome();
+	skydome_->Initialize(modelSkydome_);
 	
+
 	debugCamera_ = new DebugCamera(1280, 720);
 	
 	//軸方向表示の表示を有効にする
@@ -45,6 +51,7 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	player_->Update(); 
 	enemy_->Update();
+	skydome_->Update();
 	CheckAllCollisions();
 
 	debugCamera_->Update();
@@ -104,6 +111,7 @@ void GameScene::Update() {
 	// 3Dオブジェクト描画後処理
 	player_->Draw(viewProjection_);
 	enemy_->Draw(viewProjection_);
+	skydome_->Draw(viewProjection_);
 	Model::PostDraw();
 
 
