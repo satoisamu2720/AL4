@@ -21,10 +21,10 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("genshin.png");
 
 	model_ = Model::Create();
-	modelSkydome_->Model::CreateFromOBJ("sky", true);
+	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 
 	
-	viewProjection_.farZ= {1000000.0f};
+	
 	viewProjection_.Initialize();
 
 	player_ = new Player();

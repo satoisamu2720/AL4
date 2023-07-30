@@ -3,9 +3,9 @@
 void Skydome::Initialize(Model* model) { 
 	assert(model);
 	model_ = model;
-	worldTransfome_.Initialize();
-	worldTransfome_.scale_ = {100.0f, 100.0f, 100.0f};
-	
+	worldTransform_.Initialize();
+	worldTransform_.scale_ = {0.1f, 0.1f, 0.1f};
+	worldTransform_.UpdateMatrix();
 }
 
 void Skydome::Update() { 
@@ -13,5 +13,4 @@ void Skydome::Update() {
 }
 
 void Skydome::Draw(ViewProjection& view) { 
-	model_->Draw(worldTransfome_, view); 
-}
+	model_->Draw(worldTransform_, view); }
