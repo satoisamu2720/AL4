@@ -22,6 +22,7 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("genshin.png");
 
 	model_ = Model::Create();
+	modelSkydome_->Model::CreateFromOBJ("sky", true);
 
 	viewProjection_.Initialize();
 
@@ -34,7 +35,7 @@ void GameScene::Initialize() {
 	Vector3 position = {0, 3, 30};
 	enemy_->Initialize(model_, position, velocity_);
 
-	modelSkydome_->Model::CreateFromOBJ("skydome", true);
+	
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_);
 	

@@ -5,11 +5,10 @@ void Skydome::Initialize(Model* model) {
 	model_ = model;
 	worldTransfome_.Initialize();
 	worldTransfome_.scale_ = {100.0f, 100.0f, 100.0f};
-	worldTransfome_.UpdateMatrix();
+	
 }
 
 void Skydome::Update() {
-	worldTransfome_.TransferMatrix(); 
 }
 
 void Skydome::Draw(ViewProjection& view) { 
