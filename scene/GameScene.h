@@ -12,6 +12,7 @@
 #include "WorldTransform.h"
 #include "Enemy.h"
 #include "Skydome.h"
+#include "RailCamera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -83,7 +84,7 @@ private: // メンバ変数
 	PlayerBullet* playerbullet_ = nullptr;
 	Vector3 velocity_;
 	bool isDebugcameraActive_ = false;
-
+	RailCamera* railCamera_;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

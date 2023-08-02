@@ -17,7 +17,7 @@ public:
 	///
 	///
 	///
-	void Initialize(Model* model, uint32_t textureHandle);
+	void Initialize(Model* model, uint32_t textureHandle, Vector3 position);
 
 	///
 	///
@@ -41,6 +41,8 @@ public:
 	Vector3  GetWorldPosition();
 
 	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
+
+	void SetParent(const WorldTransform* parent) { worldTransform_.parent_ = parent; }
 	/// <summary>
 /// 
 /// </summary>
@@ -54,7 +56,7 @@ public:
 	std::list<PlayerBullet*> bullets_;
 
 
-	int32_t StopTimer = 0;
+	int StopTimer = 0;
 	
 	
 };

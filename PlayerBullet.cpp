@@ -9,21 +9,20 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position ,const Vecto
 	assert(model);
 	
 	//テクスチャ読み込み
-	texturehandle_ = TextureManager::Load("sample.png");
+	texturehandle_ = TextureManager::Load("white1x1.png");
 	model_ = model;
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
-
+	worldTransform_.UpdateMatrix();
 	velocity_ = velocity;
 	
 };
 
 
-void PlayerBullet::Updarte(){ worldTransform_.UpdateMatrix();
-	    
-worldTransform_.translation_.x += velocity_.x;
-	worldTransform_.translation_.y += velocity_.y;
-worldTransform_.translation_.z += velocity_.z;
+void PlayerBullet::Updarte()
+{ 
+	worldTransform_.UpdateMatrix();
+	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
 
 if (--deathTimer_ <= 0) {
 	isDead_ = true;

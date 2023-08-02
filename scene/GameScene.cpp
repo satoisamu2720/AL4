@@ -11,6 +11,7 @@ GameScene::~GameScene() {
 	delete enemy_;
 	delete modelSkydome_;
 	delete debugCamera_;
+	delete railCamera_;
 }
 
 void GameScene::Initialize() {
@@ -22,14 +23,15 @@ void GameScene::Initialize() {
 
 	model_ = Model::Create();
 	modelSkydome_ = Model::CreateFromOBJ("sky", true);
-
+	worldTransform_.Initialize();
 	
 	
 	viewProjection_.Initialize();
 
 	player_ = new Player();
-	playerbullet_ = new PlayerBullet();
-	player_->Initialize(model_, textureHandle_);
+	Vector3 playerPosition(0, 0, 30);
+	// 自キャラの初期化
+	player_->Initialize(model_, textureHandle_, playerPosition);
 
 	enemy_ = new Enemy();
 	enemy_->SetPlayer(player_);
@@ -40,6 +42,10 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_);
 	
+	railCamera_ = new RailCamera;
+	railCamera_->Initialize({0.0f, 0.0f, -30.0f}, {0.0f, 0.0f, 0.0f});
+
+	player_->SetParent(&railCamera_->GetWorldTransform());
 
 	debugCamera_ = new DebugCamera(1280, 720);
 	
@@ -53,8 +59,10 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	player_->Update(); 
 	enemy_->Update();
-	skydome_->Update();
 	CheckAllCollisions();
+	skydome_->Update();
+	
+	
 
 	debugCamera_->Update();
 	//デバックカメラのifdef
@@ -78,10 +86,12 @@ void GameScene::Update() {
 		//ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	} else {
-		//ビュープロジェクション行列の更新と転送
-		viewProjection_.UpdateMatrix();
+		railCamera_->Update();
+		viewProjection_.matView = railCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
+		viewProjection_.TransferMatrix();
 	}
-	CheckAllCollisions();
+	
 }
 
 	void GameScene::Draw() {

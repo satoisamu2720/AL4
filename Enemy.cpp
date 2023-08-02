@@ -28,7 +28,7 @@ void Enemy::Fire() {
 	Vector3 playerPos = player_->GetWorldPosition();
 	Vector3 enemyPos = this->GetWorldPosition();
     Vector3 velcity = Subtract(playerPos, enemyPos);
-	velcity = Normalise(velcity);
+	velcity = Normalize(velcity);
 	velcity.x *= kBulletSpeed;
 	velcity.y *= kBulletSpeed;
 	velcity.z *= kBulletSpeed;

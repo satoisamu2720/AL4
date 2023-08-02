@@ -12,28 +12,27 @@ Player::~Player() {
 
 void Player::Atack() {
 	
-	if (input_->PushKey(DIK_SPACE) ) {
-		StopTimer--;
-	if (bullet_) {
-		delete bullet_;
-		bullet_ = nullptr;
-		
-	}
-	const float kBulletSpeed = 1.0f;
-	Vector3 velcity(0, 0, kBulletSpeed);
-	velcity = TransformNormal(velcity, worldTransform_.matWorld_);
+	if (input_->PushKey(DIK_SPACE) && StopTimer == 0) {
+		StopTimer = 1;
+		const float kBulletSpeed = 1.0f;
+		Vector3 velcity(0, 0, kBulletSpeed);
+		velcity = TransformNormal(velcity, worldTransform_.matWorld_);
 		PlayerBullet* newBulllet = new PlayerBullet();
-		newBulllet->Initialize(model_, worldTransform_.translation_,velcity);
+		newBulllet->Initialize(model_, GetWorldPosition(), velcity);
 		// 弾を登録する
-		bullets_. push_back(newBulllet);
-	};
-	if (StopTimer == -2) {
-		StopTimer = 0;
+		bullets_.push_back(newBulllet);
+	} else 
+	{
+	  StopTimer = 0;
 	}
 	
-}
+	
+};
+	
+	
 
-void Player::Initialize(Model* model, uint32_t textureHandle) {
+
+void Player::Initialize(Model* model, uint32_t textureHandle ,Vector3 position) {
 
 	assert(model);
 	model_ = model;
@@ -42,6 +41,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	worldTransform_.Initialize();
 
 	input_ = Input::GetInstance();
+	worldTransform_.translation_ = Add(worldTransform_.translation_, position);
 };
 
 void Player::Update() {
@@ -56,7 +56,7 @@ void Player::Update() {
 	worldTransform_.TransferMatrix();
 	Vector3 move = {0, 0, 0};
 
-	const float kCharacterSpeed = 1.2f;
+	const float kCharacterSpeed = 0.2f;
 
 	const float kRotSpeed = 0.2f;
 	//
@@ -87,8 +87,11 @@ void Player::Update() {
 		inputFloat[1] = worldTransform_.translation_.y;
 	} else if (input_->PushKey(DIK_DOWN)) {
 		move.y -= kCharacterSpeed;
-		inputFloat[1] = worldTransform_.translation_.y;
+	inputFloat[1] = worldTransform_.translation_.y;
 	}
+	float imputFloat3[3] = {
+	    worldTransform_.translation_.x, worldTransform_.translation_.y,
+	    worldTransform_.translation_.z};
 
 	worldTransform_.translation_.x = inputFloat[0];
 	worldTransform_.translation_.y = inputFloat[1];
@@ -98,7 +101,7 @@ void Player::Update() {
 
 	worldTransform_.matWorld_ = MakeAffineMatrix(
 	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
-
+	worldTransform_.UpdateMatrix();
 	// ImGuiスライダー
 	ImGui::Begin("PlayerDebug");
 	ImGui::Text("DebugCamera Toggle : LEFT SHIFT");
@@ -115,9 +118,9 @@ void Player::Update() {
 	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
-	if (StopTimer >= -1) {
-		Atack();
-	}
+	
+	Atack();
+	
 	
 	if (bullet_) {
 		bullet_->Updarte();
