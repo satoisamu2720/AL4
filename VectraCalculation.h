@@ -353,4 +353,26 @@ inline Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
 	    v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1],
 	    v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2]};
 	return result;
+
 }
+
+ static Vector3 Subtractx(const Vector3& r1, const Vector3& r2) {
+	Vector3 result;
+	{
+		result.x = r1.x - r2.x;
+		result.y = r1.y - r2.y;
+		result.z = r1.z - r2.z;
+
+		return result;
+	}
+}
+
+static Vector3 Normalise(const Vector3& v) {
+	float mag = sqrtf((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
+	if (mag != 0) {
+		return {v.x / mag, v.y / mag, v.z / mag};
+	}
+	return v;
+}
+
+
