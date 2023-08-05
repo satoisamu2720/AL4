@@ -9,6 +9,7 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete player_;
 	delete enemy_;
+	delete skydome_;
 	delete modelSkydome_;
 	delete debugCamera_;
 	delete railCamera_;
@@ -29,7 +30,7 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 
 	player_ = new Player();
-	Vector3 playerPosition(0, 0, 30);
+	Vector3 playerPosition(0, -1, 5);
 	// 自キャラの初期化
 	player_->Initialize(model_, textureHandle_, playerPosition);
 
