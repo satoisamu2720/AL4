@@ -1,5 +1,4 @@
 #pragma once
-
 /// <summary>
 /// 3次元ベクトル
 /// </summary>
@@ -8,3 +7,5 @@ struct Vector3 final {
 	float y;
 	float z;
 };
+
+
