@@ -7,12 +7,11 @@ Player::~Player() {
 }
 
 
-void Player::Initialize(Model* model, uint32_t textureHandle ,Vector3 position) {
+void Player::Initialize(Model* model ,Vector3 position) {
 
 	assert(model);
 	model_ = model;
-	textureHandle_ = textureHandle;
-
+	
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 	input_ = Input::GetInstance();
@@ -91,7 +90,7 @@ void Player::Update() {
 
 void Player::Draw(ViewProjection view) { 
 
-	model_->Draw(worldTransform_, view, textureHandle_);
+	model_->Draw(worldTransform_, view);
 
 };
 

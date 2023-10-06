@@ -17,7 +17,7 @@ public:
 	///
 	///
 	///
-	void Initialize(Model* model, uint32_t textureHandle, Vector3 position);
+	void Initialize(Model* model, Vector3 position);
 
 	///
 	///
@@ -42,7 +42,6 @@ public:
 	~Player();
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
-	uint32_t textureHandle_ = 0u;
 	Input* input_ = nullptr;
 	float inputFloat[3]{0, 0, 0};
 	int StopTimer = 0;

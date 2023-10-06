@@ -17,8 +17,7 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	textureHandle_ = TextureManager::Load("genshin.png");
 
-	//model_ = std::unique_ptr<Model>();
-	model_.reset(Model::Create());
+	model_.reset(Model::CreateFromOBJ("float_Body", true));
 	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 	modelGround_ = Model::CreateFromOBJ("ground", true);
 	worldTransform_.Initialize();
@@ -29,7 +28,7 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	Vector3 playerPosition(0, -0.5, 6);
 	// 自キャラの初期化
-	player_->Initialize(model_.get(), textureHandle_, playerPosition);
+	player_->Initialize(model_.get(), playerPosition);
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_);
