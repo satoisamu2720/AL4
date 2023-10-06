@@ -3,33 +3,8 @@
 #include "VectraCalculation.h"
 
 Player::~Player() {
-	for (PlayerBullet * bullet : bullets_) {
 
-		delete bullet;
-	}
 }
-
-
-void Player::Atack() {
-	
-	if (input_->PushKey(DIK_SPACE) && StopTimer == 0) {
-		StopTimer = 1;
-		const float kBulletSpeed = 1.0f;
-		Vector3 velcity(0, 0, kBulletSpeed);
-		velcity = TransformNormal(velcity, worldTransform_.matWorld_);
-		PlayerBullet* newBulllet = new PlayerBullet();
-		newBulllet->Initialize(model_, GetWorldPosition(), velcity);
-		// 弾を登録する
-		bullets_.push_back(newBulllet);
-	} else 
-	{
-	  StopTimer = 0;
-	}
-	
-	
-};
-	
-	
 
 
 void Player::Initialize(Model* model, uint32_t textureHandle ,Vector3 position) {
@@ -45,14 +20,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle ,Vector3 position) 
 };
 
 void Player::Update() {
-	// falseになった弾を消す
-	bullets_.remove_if([](PlayerBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
+	
 
 	worldTransform_.TransferMatrix();
 	// キャラクターの移動ベクトル
@@ -65,6 +33,11 @@ void Player::Update() {
 	  worldTransform_.rotation_.y -= kRotSpeed;
 	} else if (input_->PushKey(DIK_D)) {
 	  worldTransform_.rotation_.y += kRotSpeed;
+	}
+	if (input_->PushKey(DIK_W)) {
+	  move.z += kCharacterSpeed;
+	} else if (input_->PushKey(DIK_S)) {
+	  move.z -= kCharacterSpeed;
 	}
 	// 押した方向で移動ベクトルを変更（左右）
 	if (input_->PushKey(DIK_LEFT)) {
@@ -112,26 +85,13 @@ void Player::Update() {
 	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
-	
-	Atack();
-	
-	
-	if (bullet_) {
-		bullet_->Updarte();
-	}
 
-	for (PlayerBullet* bullet : bullets_) {
-		bullet->Updarte();
-	}
 	
 }
 
 void Player::Draw(ViewProjection view) { 
 
 	model_->Draw(worldTransform_, view, textureHandle_);
-	for (PlayerBullet* bullet : bullets_) {
-		bullet->Draw(view);
-	}
 
 };
 

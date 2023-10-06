@@ -7,12 +7,7 @@
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
-	delete player_;
-	delete enemy_;
-	delete skydome_;
-	delete modelSkydome_;
-	delete debugCamera_;
-	delete railCamera_;
+	
 }
 
 void GameScene::Initialize() {
@@ -22,34 +17,31 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	textureHandle_ = TextureManager::Load("genshin.png");
 
-	model_ = Model::Create();
+	//model_ = std::unique_ptr<Model>();
+	model_.reset(Model::Create());
 	modelSkydome_ = Model::CreateFromOBJ("sky", true);
+	modelGround_ = Model::CreateFromOBJ("ground", true);
 	worldTransform_.Initialize();
 	
 	
 	viewProjection_.Initialize();
 
-	player_ = new Player();
-	Vector3 playerPosition(0, -1, 5);
+	player_ = std::make_unique<Player>();
+	Vector3 playerPosition(0, -0.5, 6);
 	// 自キャラの初期化
-	player_->Initialize(model_, textureHandle_, playerPosition);
+	player_->Initialize(model_.get(), textureHandle_, playerPosition);
 
-	enemy_ = new Enemy();
-	enemy_->SetPlayer(player_);
-	Vector3 position = {0, 3, 30};
-	enemy_->Initialize(model_, position, velocity_);
-
-	
-	skydome_ = new Skydome();
+	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_);
+	ground_ = std::make_unique<Ground>();
+	ground_->Initialize(modelGround_, {1.0f,-2.0f,0.0f});
 	
-	railCamera_ = new RailCamera;
+	railCamera_ = std::make_unique<RailCamera>();
 	railCamera_->Initialize({0.0f, 0.0f, -30.0f}, {0.0f, 0.0f, 0.0f});
 
 	player_->SetParent(&railCamera_->GetWorldTransform());
 
-	debugCamera_ = new DebugCamera(1280, 720);
-	
+	debugCamera_ = std::make_unique<DebugCamera>(1280,720);
 	//軸方向表示の表示を有効にする
 	AxisIndicator::GetInstance()->SetVisible(true);
 	//軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
@@ -59,9 +51,8 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 	player_->Update(); 
-	enemy_->Update();
-	CheckAllCollisions();
 	skydome_->Update();
+	ground_->Update();
 	
 	
 
@@ -124,8 +115,8 @@ void GameScene::Update() {
 
 	// 3Dオブジェクト描画後処理
 	player_->Draw(viewProjection_);
-	enemy_->Draw(viewProjection_);
 	skydome_->Draw(viewProjection_);
+	ground_->Draw(viewProjection_);
 	Model::PostDraw();
 
 
@@ -144,58 +135,4 @@ void GameScene::Update() {
 
 }
 
-	void GameScene::CheckAllCollisions() {
-	Vector3 posA, posB;
-	float enemyBulletRadius = 0.5f;
-	float playerBulletRadius = 0.5f;
-	float playerRadius = 1.0f;
-	float enemyRadius = 1.0f;
-
-	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
-
-	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
-#pragma region
-	posA = player_->GetWorldPosition();
-	for (EnemyBullet* bullet : enemyBullets) {
-		posB = bullet->GetWorldPosition();
-		float collide = {
-		    (posB.x - posA.x) * (posB.x - posA.x)+ (posB.y - posA.y) * (posB.y - posA.y)+
-		    (posB.z - posA.z) * (posB.z - posA.z)};
-		if (collide <= (playerRadius+enemyBulletRadius)*( enemyRadius+playerBulletRadius)){
-			player_->OnCollision();
-			bullet->OnCollision();
-		}
-	}
-#pragma endregion
-#pragma region
-	posA = enemy_->GetWorldPosition();
-	for (PlayerBullet* bullet : playerBullets) {
-		posB = bullet->GetWorldPosition();
-
-		float collide = {
-		    (posB.x - posA.x) * (posB.x - posA.x)+ (posB.y - posA.y) * (posB.y - posA.y)+
-		    (posB.z - posA.z) * (posB.z - posA.z)};
-		if (collide <=
-		    (enemyRadius + playerBulletRadius) * (enemyRadius + playerBulletRadius)) {
-			enemy_->OnCollision();
-			bullet->OnCollision();
-		}
-	}
-#pragma endregion
-#pragma region
-	for (EnemyBullet* eBullet : enemyBullets) {
-
-		posA = eBullet->GetWorldPosition();
-		for (PlayerBullet* pbullet : playerBullets) {
-			posB = pbullet->GetWorldPosition();
-			float collide = {
-			    (posB.x - posA.x) * (posB.x - posA.x) + (posB.y - posA.y) * (posB.y - posA.y) +
-			    (posB.z - posA.z) * (posB.z - posA.z)};
-			if (collide <=(enemyRadius + playerBulletRadius) * (enemyRadius + playerBulletRadius)) {
-				eBullet->OnCollision();
-				pbullet->OnCollision();
-			}
-		}
-	}
-#pragma endregion
- }
+	

@@ -10,11 +10,11 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include "Enemy.h"
 #include "Skydome.h"
 #include "RailCamera.h"
-
-/// <summary>
+#include "Ground.h"
+#include <memory>
+    /// <summary>
 /// ゲームシーン
 /// </summary>
 class GameScene {
@@ -51,7 +51,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 
 	/// </summary>
-	void CheckAllCollisions();
+	
 
 
 private: // メンバ変数
@@ -64,7 +64,7 @@ private: // メンバ変数
 	uint32_t textureHandle_ = 0;
 	Sprite* sprite_ = nullptr;
 
-	Model* model_ = nullptr;
+	std::unique_ptr<Model> model_;
 	
 	
 	WorldTransform worldTransform_;
@@ -75,16 +75,16 @@ private: // メンバ変数
 
 	float inputFloat3[3] = {0, 0, 0};
 
-	DebugCamera* debugCamera_ = nullptr;
-	Player* player_ = nullptr;
-	Enemy* enemy_ = nullptr;
-	Skydome* skydome_ = nullptr;
+	std::unique_ptr<DebugCamera> debugCamera_;
+	std::unique_ptr<Player> player_;
+	std::unique_ptr<Skydome>skydome_;
 	Model* modelSkydome_ = nullptr;
+	std::unique_ptr<Ground> ground_;
+	Model* modelGround_ = nullptr;
 	
-	PlayerBullet* playerbullet_ = nullptr;
 	Vector3 velocity_;
 	bool isDebugcameraActive_ = false;
-	RailCamera* railCamera_;
+	std::unique_ptr<RailCamera> railCamera_;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
