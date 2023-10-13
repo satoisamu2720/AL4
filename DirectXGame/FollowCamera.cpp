@@ -1,6 +1,6 @@
-#include "RailCamera.h"
+#include "FollowCamera.h"
 
-void RailCamera::Initialize(const Vector3& position, const Vector3& rotation) {
+void FollowCamera::Initialize(const Vector3& position, const Vector3& rotation) {
 	worldTransform_.scale_ = {1.0f, 1.0f, 10.0f};
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_ = rotation;
@@ -8,7 +8,7 @@ void RailCamera::Initialize(const Vector3& position, const Vector3& rotation) {
 	viewProjection_.Initialize();
 }
 
-void RailCamera::Update() {
+void FollowCamera::Update() {
 	/*worldTransform_.translation_.z -= 0.05f;
 	worldTransform_.rotation_.y += 0.001f;*/
 	worldTransform_.matWorld_ = MakeAffineMatrix(

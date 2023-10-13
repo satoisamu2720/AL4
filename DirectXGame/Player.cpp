@@ -33,9 +33,9 @@ void Player::Update() {
 	} else if (input_->PushKey(DIK_D)) {
 	  worldTransform_.rotation_.y += kRotSpeed;
 	}
-	if (input_->PushKey(DIK_W)) {
+	if (input_->PushKey(DIK_UP)) {
 	  move.z += kCharacterSpeed;
-	} else if (input_->PushKey(DIK_S)) {
+	} else if (input_->PushKey(DIK_DOWN)) {
 	  move.z -= kCharacterSpeed;
 	}
 	// 押した方向で移動ベクトルを変更（左右）
@@ -46,9 +46,9 @@ void Player::Update() {
 	}
 
 	// 押した方向で移動ベクトルを変更（上下）
-	if (input_->PushKey(DIK_UP)) {
+	if (input_->PushKey(DIK_W)) {
 	  move.y += kCharacterSpeed;
-	} else if (input_->PushKey(DIK_DOWN)) {
+	} else if (input_->PushKey(DIK_S)) {
 	  move.y -= kCharacterSpeed;
 	}
 

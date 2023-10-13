@@ -115,7 +115,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
-    <ClCompile Include="RailCamera.cpp" />
+    <ClCompile Include="FollowCamera.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="WorldTransform.EX.cpp" />
@@ -153,7 +153,7 @@
     <ClInclude Include="math\Vector4.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerBullet.h" />
-    <ClInclude Include="RailCamera.h" />
+    <ClInclude Include="FollowCamera.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="Skydome.h" />
   </ItemGroup>

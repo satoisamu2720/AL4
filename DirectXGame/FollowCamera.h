@@ -3,8 +3,9 @@
 #include "WorldTransform.h"
 #include "VectraCalculation.h"
 #include "ImGuiManager.h"
+#include <memory>
 
-class RailCamera {
+class FollowCamera {
 
 public:
 	void Initialize(const Vector3& position, const Vector3& rotation);
