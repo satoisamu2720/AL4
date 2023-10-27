@@ -26,7 +26,7 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 
 	player_ = std::make_unique<Player>();
-	Vector3 playerPosition(0, -0.5, 6);
+	Vector3 playerPosition(0, -1, 6);
 	// 自キャラの初期化
 	player_->Initialize(model_.get(), playerPosition);
 
@@ -36,9 +36,14 @@ void GameScene::Initialize() {
 	ground_->Initialize(modelGround_, {1.0f,-2.0f,0.0f});
 	
 	railCamera_ = std::make_unique<RailCamera>();
-	railCamera_->Initialize({0.0f, 0.0f, -30.0f}, {0.0f, 0.0f, 0.0f});
+	railCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
 
-	player_->SetParent(&railCamera_->GetWorldTransform());
+	followCamera_ = std::make_unique<FollowCamera>();
+	followCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
+	followCamera_->SetTarget(&player_->GetWorldTransform());
+
+
+	player_->SetViewProjection(&followCamera_->GetViewProjection());
 
 	debugCamera_ = std::make_unique<DebugCamera>(1280,720);
 	//軸方向表示の表示を有効にする
@@ -54,15 +59,15 @@ void GameScene::Update() {
 	ground_->Update();
 	
 	
-
+	
 	debugCamera_->Update();
 	//デバックカメラのifdef
 
 	#ifdef _DEBUG
-	if (input_->TriggerKey(DIK_LSHIFT) && isDebugcameraActive_ == false) {
-		isDebugcameraActive_ = true;
-	} else if (input_->TriggerKey(DIK_LSHIFT) && isDebugcameraActive_ == true) {
-		isDebugcameraActive_ = false;
+	if (input_->TriggerKey(DIK_LSHIFT) && isDebugCameraActive_ == false) {
+		isDebugCameraActive_ = true;
+	} else if (input_->TriggerKey(DIK_LSHIFT) && isDebugCameraActive_ == true) {
+		isDebugCameraActive_ = false;
 		
 	}
     #endif
@@ -70,17 +75,25 @@ void GameScene::Update() {
 
 	
 	//カメラ処理
-	if (isDebugcameraActive_ ==true) {
+	if (isDebugCameraActive_ == true) {
 		debugCamera_->Update();
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
 		//ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	} else {
-		railCamera_->Update();
-		viewProjection_.matView = railCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
+		followCamera_->Update();
+		//railCamera_->Update();
+
+		viewProjection_.matView = followCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
+
+		/*viewProjection_.matView = railCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;*/
 		viewProjection_.TransferMatrix();
+
+		
+
 	}
 	
 }

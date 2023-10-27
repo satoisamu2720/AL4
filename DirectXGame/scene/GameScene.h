@@ -12,8 +12,10 @@
 #include "WorldTransform.h"
 #include "Skydome.h"
 #include "RailCamera.h"
+#include "FollowCamera.h"
 #include "Ground.h"
 #include <memory>
+
     /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -53,7 +55,6 @@ public: // メンバ関数
 	/// </summary>
 	
 
-
 private: // メンバ変数
 	// テクスチャハンドル
 
@@ -83,8 +84,12 @@ private: // メンバ変数
 	Model* modelGround_ = nullptr;
 	
 	Vector3 velocity_;
-	bool isDebugcameraActive_ = false;
+
+	//const WorldTransform& GetWorldTransform() { return matProjection; }
+
+	bool isDebugCameraActive_ = false;
 	std::unique_ptr<RailCamera> railCamera_;
+	std::unique_ptr<FollowCamera> followCamera_;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

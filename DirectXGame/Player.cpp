@@ -7,7 +7,7 @@ Player::~Player() {
 }
 
 
-void Player::Initialize(Model* model ,Vector3 position) {
+void Player::Initialize(Model* model, Vector3 position) {
 
 	assert(model);
 	model_ = model;
@@ -16,64 +16,59 @@ void Player::Initialize(Model* model ,Vector3 position) {
 	worldTransform_.translation_ = position;
 	input_ = Input::GetInstance();
 	worldTransform_.translation_ = Add(worldTransform_.translation_, position);
+	
 };
 
 void Player::Update() {
 	
-
-	worldTransform_.TransferMatrix();
-	// キャラクターの移動ベクトル
-	Vector3 move = {0, 0, 0};
+	
+	//worldTransform_.TransferMatrix();
+	
+	Vector3 move_ = {0, 0, 0};
 
 	// キャラクターの移動速度
-	const float kCharacterSpeed = 0.2f;
-	const float kRotSpeed = 0.2f;
-	if (input_->PushKey(DIK_A)) {
-	  worldTransform_.rotation_.y -= kRotSpeed;
-	} else if (input_->PushKey(DIK_D)) {
-	  worldTransform_.rotation_.y += kRotSpeed;
-	}
-	if (input_->PushKey(DIK_UP)) {
-	  move.z += kCharacterSpeed;
-	} else if (input_->PushKey(DIK_DOWN)) {
-	  move.z -= kCharacterSpeed;
+	const float kCharacterSpeed = 0.5f;
+	//const float kRotSpeed = 0.05f;
+	if (input_->PushKey(DIK_W)) {
+		move_.z += kCharacterSpeed;
+	} else if (input_->PushKey(DIK_S)) {
+		move_.z -= kCharacterSpeed;
 	}
 	// 押した方向で移動ベクトルを変更（左右）
-	if (input_->PushKey(DIK_LEFT)) {
-	  move.x -= kCharacterSpeed;
-	} else if (input_->PushKey(DIK_RIGHT)) {
-	  move.x += kCharacterSpeed;
+	if (input_->PushKey(DIK_A)) {
+		move_.x -= kCharacterSpeed;
+	} else if (input_->PushKey(DIK_D)) {
+		move_.x += kCharacterSpeed;
 	}
 
-	// 押した方向で移動ベクトルを変更（上下）
-	if (input_->PushKey(DIK_W)) {
-	  move.y += kCharacterSpeed;
-	} else if (input_->PushKey(DIK_S)) {
-	  move.y -= kCharacterSpeed;
-	}
+
+	
+
+	move_ = TransformNormal(move_, MakeRotateYMatrix(viewProjection_->rotation_.y));
+	// Y軸周り角度
+	worldTransform_.rotation_.y = std::atan2(move_.x, move_.z);
 
 	// ベクターの加算
-	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
-	// アフィン変換行列の作成
-	worldTransform_.matWorld_ = MakeAffineMatrix(
-	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+	worldTransform_.translation_ = Add(worldTransform_.translation_, move_);
+	//// アフィン変換行列の作成
+	//worldTransform_.matWorld_ = MakeAffineMatrix(
+	//    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 	// 行列更新
 	worldTransform_.UpdateMatrix();
-
+	
 
 
 	float imputFloat3[3] = {
-	    worldTransform_.translation_.x, worldTransform_.translation_.y,
-	    worldTransform_.translation_.z};
+	    worldTransform_.rotation_.x, worldTransform_.rotation_.y, worldTransform_.rotation_.z};
 
 	// デバッグ
 	ImGui::Begin("Debug");
 	ImGui::Text("Toggle Camera Flag :  LEFT SHIFT key");
 	ImGui::SliderFloat3("player", imputFloat3, -30.0f, 30.0f);
 	ImGui::End();
-	worldTransform_.translation_.x = imputFloat3[0];
-	worldTransform_.translation_.y = imputFloat3[1];
-	worldTransform_.translation_.z = imputFloat3[2];
+	worldTransform_.rotation_.x = imputFloat3[0];
+	worldTransform_.rotation_.y = imputFloat3[1];
+	worldTransform_.rotation_.z = imputFloat3[2];
 
 	// 移動限界座標
 	const float kMoveLimitX = 34;
