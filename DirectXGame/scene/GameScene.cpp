@@ -7,10 +7,7 @@
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
-	modelFighterBody_;
-	modelFighterHead_;
-	modelFighterL_arm_;
-	modelFighterR_arm_;
+	
 }
 
 void GameScene::Initialize() {

@@ -9,6 +9,7 @@ Player::~Player() {
 
 void Player::Initialize(Model* modelBody, Model* modeHead, Model* modeL_arm, Model* modelR_arm, Vector3 position) {	
 
+
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 	input_ = Input::GetInstance();
