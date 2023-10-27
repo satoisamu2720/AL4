@@ -18,7 +18,7 @@ public:
 	///
 	///
 	///
-	void Initialize( Model* modelBody, Model* modeHead, Model* modeL_arm, Model* modelR_arm,Vector3 position);
+	void Initialize(Model* model, Vector3 position);
 
 	///
 	///
@@ -48,13 +48,7 @@ public:
 private:
 	WorldTransform worldTransform_;
 	const ViewProjection* viewProjection_ = nullptr;
-
-
-	std::unique_ptr<Model> modelFighterBody_;
-	std::unique_ptr<Model> modelFighterHead_;
-	std::unique_ptr<Model> modelFighterL_arm_;
-	std::unique_ptr<Model> modelFighterR_arm_;
-
+	Model* model_ = nullptr;
 	Input* input_ = nullptr;
 	float inputFloat[3]{0, 0, 0};
 	int StopTimer = 0;
