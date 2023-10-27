@@ -7,7 +7,10 @@
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
-	
+	modelFighterBody_;
+	modelFighterHead_;
+	modelFighterL_arm_;
+	modelFighterR_arm_;
 }
 
 void GameScene::Initialize() {
@@ -17,7 +20,11 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	textureHandle_ = TextureManager::Load("genshin.png");
 
-	model_.reset(Model::CreateFromOBJ("float_Body", true));
+	modelFighterBody_.reset(Model::CreateFromOBJ("float_Body", true));
+	modelFighterHead_.reset(Model::CreateFromOBJ("float_Head_", true));
+	modelFighterL_arm_.reset(Model::CreateFromOBJ("float_L_arm", true));
+	modelFighterR_arm_.reset(Model::CreateFromOBJ("float_R_arm", true));
+
 	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 	modelGround_ = Model::CreateFromOBJ("ground", true);
 	worldTransform_.Initialize();
@@ -28,7 +35,10 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	Vector3 playerPosition(0, -1, 6);
 	// 自キャラの初期化
-	player_->Initialize(model_.get(), playerPosition);
+	player_->Initialize(
+		modelFighterBody_.get(), modelFighterHead_.get(),
+		modelFighterL_arm_.get(),modelFighterR_arm_.get(),
+		playerPosition);
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_);

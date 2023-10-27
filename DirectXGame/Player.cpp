@@ -7,11 +7,8 @@ Player::~Player() {
 }
 
 
-void Player::Initialize(Model* model, Vector3 position) {
+void Player::Initialize(Model* modelBody, Model* modeHead, Model* modeL_arm, Model* modelR_arm, Vector3 position) {	
 
-	assert(model);
-	model_ = model;
-	
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 	input_ = Input::GetInstance();
@@ -85,10 +82,11 @@ void Player::Update() {
 
 void Player::Draw(ViewProjection view) { 
 
-	model_->Draw(worldTransform_, view);
-
+	modelFighterBody_->Draw(worldTransform_, view);
+	modelFighterHead_->Draw(worldTransform_, view);
+	modelFighterL_arm_->Draw(worldTransform_, view);
+	modelFighterR_arm_->Draw(worldTransform_, view);
 };
-
 void Player::OnCollision() {  }
 
 
