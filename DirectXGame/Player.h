@@ -18,7 +18,9 @@ public:
 	///
 	///
 	///
-	void Initialize( Model* modelBody, Model* modeHead, Model* modeL_arm, Model* modelR_arm,Vector3 position);
+	void Initialize(
+	    Model* modelBody, Model* modelHead, Model* modelL_arm, Model* modelR_arm,
+	    Vector3 BodyPosition, Vector3 HeadPosition, Vector3 L_armPosition, Vector3 R_armPosition);
 
 	///
 	///
@@ -39,7 +41,7 @@ public:
 	void SetViewProjection(const ViewProjection* viewProjection) {
 		viewProjection_ = viewProjection;
 	}
-	const WorldTransform& GetWorldTransform() { return worldTransform_; }
+	const WorldTransform& GetWorldTransform() { return worldTransformBody_; }
 	/// <summary>
 /// 
 /// </summary>
@@ -47,13 +49,19 @@ public:
 
 private:
 	WorldTransform worldTransform_;
+
+	WorldTransform worldTransformBody_;
+	WorldTransform worldTransformHead_;
+	WorldTransform worldTransformL_arm_;
+	WorldTransform worldTransformR_arm_;
+
 	const ViewProjection* viewProjection_ = nullptr;
 
 
-	std::unique_ptr<Model> modelFighterBody_;
-	std::unique_ptr<Model> modelFighterHead_;
-	std::unique_ptr<Model> modelFighterL_arm_;
-	std::unique_ptr<Model> modelFighterR_arm_;
+	Model* modelFighterBody_;
+	Model* modelFighterHead_;
+	Model* modelFighterL_arm_;
+	Model* modelFighterR_arm_;
 
 	Input* input_ = nullptr;
 	float inputFloat[3]{0, 0, 0};

@@ -7,13 +7,36 @@ Player::~Player() {
 }
 
 
-void Player::Initialize(Model* modelBody, Model* modeHead, Model* modeL_arm, Model* modelR_arm, Vector3 position) {	
+void Player::Initialize(
+    Model* modelBody, Model* modelHead, Model* modelL_arm, Model* modelR_arm,
+    Vector3 BodyPosition, Vector3 HeadPosition, Vector3 L_armPosition,Vector3 R_armPosition) {	
 
+	assert(modelBody);
+	assert(modelHead);
+	assert(modelL_arm);
+	assert(modelR_arm);
+
+	modelFighterBody_ = modelBody;
+	modelFighterHead_ = modelHead;
+	modelFighterL_arm_ = modelL_arm;
+	modelFighterR_arm_ = modelR_arm;
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = position;
+	worldTransformBody_.Initialize();
+	worldTransformHead_.Initialize();
+	worldTransformL_arm_.Initialize();
+	worldTransformR_arm_.Initialize();
+
+	worldTransformBody_.translation_ = BodyPosition;
+	worldTransformHead_.translation_ = HeadPosition;
+	worldTransformL_arm_.translation_ = L_armPosition;
+	worldTransformR_arm_.translation_ = R_armPosition;
+
 	input_ = Input::GetInstance();
-	worldTransform_.translation_ = Add(worldTransform_.translation_, position);
+	worldTransformBody_.translation_ = Add(worldTransformBody_.translation_, BodyPosition);
+	worldTransformHead_.translation_ = Add(worldTransformHead_.translation_, HeadPosition);
+	worldTransformL_arm_.translation_ = Add(worldTransformL_arm_.translation_, L_armPosition);
+	worldTransformR_arm_.translation_ = Add(worldTransformR_arm_.translation_, R_armPosition);
 	
 };
 
@@ -44,49 +67,70 @@ void Player::Update() {
 
 	move_ = TransformNormal(move_, MakeRotateYMatrix(viewProjection_->rotation_.y));
 	// Y軸周り角度
-	worldTransform_.rotation_.y = std::atan2(move_.x, move_.z);
-
+	worldTransformBody_.rotation_.y = std::atan2(move_.x, move_.z);
 	// ベクターの加算
-	worldTransform_.translation_ = Add(worldTransform_.translation_, move_);
-	//// アフィン変換行列の作成
-	//worldTransform_.matWorld_ = MakeAffineMatrix(
-	//    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+	worldTransformBody_.translation_ = Add(worldTransformBody_.translation_, move_);
 	// 行列更新
-	worldTransform_.UpdateMatrix();
+	worldTransformBody_.UpdateMatrix();
+
+
+	// Y軸周り角度
+	worldTransformHead_.rotation_.y = std::atan2(move_.x, move_.z);
+	// ベクターの加算
+	worldTransformHead_.translation_ = Add(worldTransformHead_.translation_, move_);
+	// 行列更新
+	worldTransformHead_.UpdateMatrix();
+
+
+	// Y軸周り角度
+	worldTransformL_arm_.rotation_.y = std::atan2(move_.x, move_.z);
+	// ベクターの加算
+	worldTransformL_arm_.translation_ = Add(worldTransformL_arm_.translation_, move_);
+	// 行列更新
+	worldTransformL_arm_.UpdateMatrix();
+
+
+	// Y軸周り角度
+	worldTransformR_arm_.rotation_.y = std::atan2(move_.x, move_.z);
+	// ベクターの加算
+	worldTransformR_arm_.translation_ = Add(worldTransformR_arm_.translation_, move_);
+	// 行列更新
+	worldTransformR_arm_.UpdateMatrix();
+
 	
 
 
-	float imputFloat3[3] = {
-	    worldTransform_.rotation_.x, worldTransform_.rotation_.y, worldTransform_.rotation_.z};
+	/*float imputFloat3[3] = {
+	    worldTransform_.rotation_.x, worldTransform_.rotation_.y, worldTransform_.rotation_.z};*/
 
 	// デバッグ
-	ImGui::Begin("Debug");
+	/*ImGui::Begin("Debug");
 	ImGui::Text("Toggle Camera Flag :  LEFT SHIFT key");
 	ImGui::SliderFloat3("player", imputFloat3, -30.0f, 30.0f);
-	ImGui::End();
-	worldTransform_.rotation_.x = imputFloat3[0];
-	worldTransform_.rotation_.y = imputFloat3[1];
-	worldTransform_.rotation_.z = imputFloat3[2];
+	ImGui::End();*/
+	//worldTransform_.rotation_.x = imputFloat3[0];
+	//worldTransform_.rotation_.y = imputFloat3[1];
+	//worldTransform_.rotation_.z = imputFloat3[2];
 
-	// 移動限界座標
-	const float kMoveLimitX = 34;
-	const float kMoveLimitY = 18;
+	//// 移動限界座標
+	//const float kMoveLimitX = 34;
+	//const float kMoveLimitY = 18;
 
-	// 範囲を超えない処理
-	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
-	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
-	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
-	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
+	//// 範囲を超えない処理
+	//worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
+	//worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
+	//worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
+	//worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
 	
 }
 
 void Player::Draw(ViewProjection view) { 
 
-	modelFighterBody_->Draw(worldTransform_, view);
-	modelFighterHead_->Draw(worldTransform_, view);
-	modelFighterL_arm_->Draw(worldTransform_, view);
-	modelFighterR_arm_->Draw(worldTransform_, view);
+	modelFighterBody_->Draw(worldTransformBody_, view);
+	modelFighterHead_->Draw(worldTransformHead_, view);
+	modelFighterL_arm_->Draw(worldTransformL_arm_, view);
+	modelFighterR_arm_->Draw(worldTransformR_arm_, view);
 };
 void Player::OnCollision() {  }
 
