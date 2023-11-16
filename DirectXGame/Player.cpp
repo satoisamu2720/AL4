@@ -31,6 +31,11 @@ void Player::Initialize(
 	worldTransformL_arm_.translation_ = L_armPosition;
 	worldTransformR_arm_.translation_ = R_armPosition;
 
+
+	worldTransformL_arm_.rotation_.x = 0.5f;
+	worldTransformR_arm_.rotation_.x = 0.5f;
+
+
 	worldTransformBody_.parent_ = &worldTransform_;
 	worldTransformHead_.parent_ = &worldTransform_;
 	worldTransformL_arm_.parent_ = &worldTransform_;
@@ -137,8 +142,8 @@ void Player::UpdateFloatingGimmick() {
 
 	const float amplitude = 0.02f;
 	worldTransform_.translation_.y += std::sin(floatingParameter_) * amplitude;
-	// worldTransformHead_.translation_.y = std::sin(floatingParameter_) * amplitude;
-	/*worldTransformL_arm_.translation_.z = std::cos(floatingParameter_) * amplitude;
-	worldTransformR_arm_.translation_.z = std::cos(floatingParameter_) * amplitude;*/
+	//worldTransformHead_.translation_.y = std::sin(floatingParameter_) * amplitude;
+	worldTransformL_arm_.rotation_.x+= std::cos(floatingParameter_) * amplitude;
+	worldTransformR_arm_.rotation_.x += std::cos(floatingParameter_) * amplitude;
 }
 void Player::DrawFloatingGimmick(){};

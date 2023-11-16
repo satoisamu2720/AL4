@@ -32,9 +32,9 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	Vector3 playerPosition(0, 0, 0);
 	Vector3 bodyPosition(0, 0, 0);
-	Vector3 headPosition(0, 1.0, 0);
-	Vector3 l_amrPosition(-0.5f, 1.0f, 0);
-	Vector3 r_amrPosition(0.5f, 1.0f, 0);
+	Vector3 headPosition(0, 1.4f, 0);
+	Vector3 l_amrPosition(-0.5f, 1.4f, 0);
+	Vector3 r_amrPosition(0.5f, 1.4f, 0);
 	// 自キャラの初期化
 	player_->Initialize(
 		modelFighterBody_.get(), modelFighterHead_.get(), 
