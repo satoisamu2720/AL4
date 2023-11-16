@@ -30,20 +30,22 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 
 	player_ = std::make_unique<Player>();
-	Vector3 bodyPosition(0, -1, 0);
-	Vector3 headPosition(0, -0.5f, 0);
-	Vector3 l_amrPosition(-0.2f, -0.5f, 0);
-	Vector3 r_amrPosition(0.2f, -0.5f, 0);
+	Vector3 playerPosition(0, 0, 0);
+	Vector3 bodyPosition(0, 0, 0);
+	Vector3 headPosition(0, 1.0, 0);
+	Vector3 l_amrPosition(-0.5f, 1.0f, 0);
+	Vector3 r_amrPosition(0.5f, 1.0f, 0);
 	// 自キャラの初期化
 	player_->Initialize(
 		modelFighterBody_.get(), modelFighterHead_.get(), 
 		modelFighterL_arm_.get(),modelFighterR_arm_.get(), 
-		bodyPosition, headPosition, l_amrPosition, r_amrPosition);
+		playerPosition, bodyPosition, headPosition, l_amrPosition,
+	    r_amrPosition);
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_);
 	ground_ = std::make_unique<Ground>();
-	ground_->Initialize(modelGround_, {1.0f,-2.0f,0.0f});
+	ground_->Initialize(modelGround_, {1.0f,0.0f,0.0f});
 	
 	railCamera_ = std::make_unique<RailCamera>();
 	railCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
@@ -54,6 +56,8 @@ void GameScene::Initialize() {
 
 
 	player_->SetViewProjection(&followCamera_->GetViewProjection());
+
+	
 
 	debugCamera_ = std::make_unique<DebugCamera>(1280,720);
 	//軸方向表示の表示を有効にする
@@ -66,6 +70,7 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	player_->Update(); 
 	skydome_->Update();
+
 	ground_->Update();
 	
 	

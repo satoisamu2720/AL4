@@ -1,4 +1,5 @@
 ﻿#pragma once
+#define _USE_MATH_DEFINES
 #include "Model.h"
 #include "ImGuiManager.h"
 #include "TextureManager.h"
@@ -9,6 +10,8 @@
 #include <list>
 #include "RailCamera.h"
 #include "math.h"
+#include <stdio.h>
+
 
 class Player {
 public:
@@ -19,8 +22,9 @@ public:
 	///
 	///
 	void Initialize(
-	    Model* modelBody, Model* modelHead, Model* modelL_arm, Model* modelR_arm,
-	    Vector3 BodyPosition, Vector3 HeadPosition, Vector3 L_armPosition, Vector3 R_armPosition);
+	    Model* modelBody, Model* modelHead, Model* modelL_arm, Model* modelR_arm, Vector3 Position,
+	    Vector3 BodyPosition, Vector3 HeadPosition, Vector3 L_armPosition, Vector3 R_armPosition
+	  );
 
 	///
 	///
@@ -34,6 +38,12 @@ public:
 	///
 	///
 	///
+	void InitializeFloatingGimmick(); 
+	void UpdateFloatingGimmick(); 
+	void DrawFloatingGimmick(); 
+	///
+	/// 
+	/// 
 	void OnCollision();
 	
 	Vector3  GetWorldPosition();
@@ -41,7 +51,10 @@ public:
 	void SetViewProjection(const ViewProjection* viewProjection) {
 		viewProjection_ = viewProjection;
 	}
-	const WorldTransform& GetWorldTransform() { return worldTransformBody_; }
+	
+	const WorldTransform& GetWorldTransform() { return worldTransform_; }
+
+	
 	/// <summary>
 /// 
 /// </summary>
@@ -71,5 +84,8 @@ private:
 	// キャラクターの移動ベクトル
 	
 	Vector3 velocity_ = {0, 0, 0};
+
+	//モーション変数
+	float floatingParameter_ = 0.0f;
 	
 };
