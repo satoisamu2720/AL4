@@ -1,9 +1,11 @@
 #pragma once
-
+#define _USE_MATH_DEFINES
 #include "Matrix4x4.h"
 #include "Vector3.h"
 #include <assert.h>
 #include <cmath>
+#include "math.h"
+#include <stdio.h>
 
 inline Vector3 Add(Vector3 a, Vector3 b) { return {a.x + b.x, a.y + b.y, a.z + b.z}; }
 
@@ -375,4 +377,11 @@ static Vector3 Normalise(const Vector3& v) {
 	return v;
 }
 
-
+//float LerpShortAngle(float a, float b, float t) { 
+//	float diff = b - a;
+//	Vector3 radian;
+//	radian.y = std::fmod(2*M_PI+10, M_PI);
+//	radian.y = diff * (M_PI / 180);
+//	return Lerp(t, radian, radian);
+//}
+//

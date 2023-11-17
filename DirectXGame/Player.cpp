@@ -32,8 +32,8 @@ void Player::Initialize(
 	worldTransformR_arm_.translation_ = R_armPosition;
 
 
-	worldTransformL_arm_.rotation_.x = 0.5f;
-	worldTransformR_arm_.rotation_.x = 0.5f;
+	worldTransformL_arm_.rotation_.x = 0.3f;
+	worldTransformR_arm_.rotation_.x = 0.3f;
 
 
 	worldTransformBody_.parent_ = &worldTransform_;
@@ -86,6 +86,7 @@ void Player::Update() {
 	worldTransformL_arm_.UpdateMatrix();
 	worldTransformR_arm_.UpdateMatrix();
 	
+	worldTransform_.rotation_ = Lerp(1, worldTransform_.rotation_, worldTransform_.rotation_);
 
 	float imputFloat3[3] = {
 	    worldTransform_.translation_.x, worldTransform_.translation_.y,
