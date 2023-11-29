@@ -6,9 +6,10 @@
 #include "WorldTransform.h"
 #include "assert.h"
 #include <list>
+#include "BaseCharacter.h"
 class Player;
 
-class Enemy {
+class Enemy : public BaseCharacter {
 public:
 	/// <summary>
 	/// 初期化

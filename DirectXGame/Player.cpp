@@ -5,31 +5,20 @@
 Player::~Player() {}
 
 void Player::Initialize(
-    Model* modelBody, Model* modelHead, Model* modelL_arm, Model* modelR_arm, Vector3 Position,
-    Vector3 BodyPosition, Vector3 HeadPosition, Vector3 L_armPosition, Vector3 R_armPosition
-    ) {
-
-	assert(modelBody);
-	assert(modelHead);
-	assert(modelL_arm);
-	assert(modelR_arm);
-
-	modelFighterBody_ = modelBody;
-	modelFighterHead_ = modelHead;
-	modelFighterL_arm_ = modelL_arm;
-	modelFighterR_arm_ = modelR_arm;
-
+    const std::vector<Model*>& models) {
+	BaseCharacter::Initialize(models);
+	
 	worldTransform_.Initialize();
 	worldTransformBody_.Initialize();
 	worldTransformHead_.Initialize();
 	worldTransformL_arm_.Initialize();
 	worldTransformR_arm_.Initialize();
 
-	worldTransform_.translation_ = Position;
-	worldTransformBody_.translation_ = BodyPosition;
-	worldTransformHead_.translation_ = HeadPosition;
-	worldTransformL_arm_.translation_ = L_armPosition;
-	worldTransformR_arm_.translation_ = R_armPosition;
+	worldTransform_.translation_ = playerPosition;
+	worldTransformBody_.translation_ = bodyPosition;
+	worldTransformHead_.translation_ = headPosition;
+	worldTransformL_arm_.translation_ = l_amrPosition;
+	worldTransformR_arm_.translation_ = r_amrPosition;
 
 
 	worldTransformL_arm_.rotation_.x = 0.5f;
@@ -45,7 +34,7 @@ void Player::Initialize(
 
 	input_ = Input::GetInstance();
 
-	worldTransform_.translation_ = Add(worldTransform_.translation_, Position);
+	worldTransform_.translation_ = Add(worldTransform_.translation_, playerPosition);
 	InitializeFloatingGimmick();
 };
 
@@ -113,10 +102,10 @@ void Player::Update() {
 
 void Player::Draw(ViewProjection view) {
 
-	modelFighterBody_->Draw(worldTransformBody_, view);
-	modelFighterHead_->Draw(worldTransformHead_, view);
-	modelFighterL_arm_->Draw(worldTransformL_arm_, view);
-	modelFighterR_arm_->Draw(worldTransformR_arm_, view);
+	models_[0]->Draw(worldTransformBody_, view);
+	models_[1]->Draw(worldTransformHead_, view);
+	models_[2]->Draw(worldTransformL_arm_, view);
+	models_[3]->Draw(worldTransformR_arm_, view);
 }
 void Player::OnCollision() {}
 

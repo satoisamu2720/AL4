@@ -11,9 +11,10 @@
 #include "RailCamera.h"
 #include "math.h"
 #include <stdio.h>
+#include "BaseCharacter.h"
 
 
-class Player {
+class Player :public BaseCharacter {
 public:
 	
 	///
@@ -21,11 +22,12 @@ public:
 	///
 	///
 	///
-	void Initialize(
+	/*void Initialize(
 	    Model* modelBody, Model* modelHead, Model* modelL_arm, Model* modelR_arm, Vector3 Position,
 	    Vector3 BodyPosition, Vector3 HeadPosition, Vector3 L_armPosition, Vector3 R_armPosition
-	  );
-
+	  );*/
+	void Initialize(
+	    const std::vector<Model*>& models);
 	///
 	///
 	///
@@ -34,7 +36,7 @@ public:
 	///
 	///
 	///
-	void Draw(ViewProjection view);
+	void Draw(ViewProjection view) ;
 	///
 	///
 	///
@@ -84,7 +86,11 @@ private:
 	// キャラクターの移動ベクトル
 	
 	Vector3 velocity_ = {0, 0, 0};
-
+	Vector3 playerPosition = {0, 0, 0};
+	Vector3 bodyPosition = {0,0,0};
+	Vector3 headPosition = {0, 1.4f, 0};
+	Vector3 l_amrPosition = {-0.5f, 1.4f, 0};
+	Vector3 r_amrPosition = {0.5f, 1.4f, 0};
 	//モーション変数
 	float floatingParameter_ = 0.0f;
 	
