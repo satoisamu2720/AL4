@@ -14,7 +14,7 @@ class EnemyBullet {
 	 /// <summary>
 	/// 更新
 	/// </summary>
-	void Updarte();
+	void Updated();
 	/// <summary>
 	/// 描画
 	/// </summary>

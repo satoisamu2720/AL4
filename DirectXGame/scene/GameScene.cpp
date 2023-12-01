@@ -21,26 +21,40 @@ void GameScene::Initialize() {
 	modelFighterHead_.reset(Model::CreateFromOBJ("float_Head", true));
 	modelFighterL_arm_.reset(Model::CreateFromOBJ("float_L_arm", true));
 	modelFighterR_arm_.reset(Model::CreateFromOBJ("float_R_arm", true));
+	modelEnemyBody_.reset(Model::CreateFromOBJ("needle_Body", true));
+	modelEnemyL_arm_.reset(Model::CreateFromOBJ("needle_L_arm", true));
+	modelEnemyR_arm_.reset(Model::CreateFromOBJ("needle_R_arm", true));
+
 
 	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 	modelGround_ = Model::CreateFromOBJ("ground", true);
+
 	worldTransform_.Initialize();
-	
-	
 	viewProjection_.Initialize();
-
-	player_ = std::make_unique<Player>();
-	
-
 	//自キャラモデル
 	std::vector<Model*> playerModels = {
-	    modelFighterBody_.get(), modelFighterHead_.get(), modelFighterL_arm_.get(),
-	    modelFighterR_arm_.get()};
-	// 自キャラの初期化
+	    modelFighterBody_.get(), 
+		modelFighterHead_.get(), 
+		modelFighterL_arm_.get(),
+	    modelFighterR_arm_.get()
+	};
+
+	//敵キャラモデル
+	std::vector<Model*> enemyModels = {
+	    modelEnemyBody_.get(),
+		modelEnemyL_arm_.get(), 
+		modelEnemyR_arm_.get()
+	};
+	//初期化
+	player_ = std::make_unique<Player>();
 	player_->Initialize(playerModels);
+
+	enemy_ = std::make_unique<Enemy>();
+	enemy_->Initialize(enemyModels);
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_);
+
 	ground_ = std::make_unique<Ground>();
 	ground_->Initialize(modelGround_, {1.0f,0.0f,0.0f});
 	
@@ -53,6 +67,7 @@ void GameScene::Initialize() {
 
 
 	player_->SetViewProjection(&followCamera_->GetViewProjection());
+	enemy_->SetViewProjection(&followCamera_->GetEnemyViewProjection());
 
 	
 
@@ -67,7 +82,7 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	player_->Update(); 
 	skydome_->Update();
-
+	enemy_->Update();
 	ground_->Update();
 	
 	
@@ -141,6 +156,7 @@ void GameScene::Update() {
 	player_->Draw(viewProjection_);
 	skydome_->Draw(viewProjection_);
 	ground_->Draw(viewProjection_);
+	enemy_->Draw(viewProjection_);
 	Model::PostDraw();
 
 

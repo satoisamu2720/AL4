@@ -13,7 +13,7 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 	velocity_ = velocity;
 };
 
-void EnemyBullet::Updarte() {
+void EnemyBullet::Updated() {
 
 	worldTransform_.UpdateMatrix();
 

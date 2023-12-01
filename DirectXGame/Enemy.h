@@ -16,7 +16,7 @@ public:
 	/// </summary>
 	/// <param name= "model">モデル</param>
 	/// <param name= "textureHandle">初期座標</param>
-	void Initialize(Model* model, const Vector3& position, const Vector3& velocity);
+	void Initialize(const std::vector<Model*>& models);
 
 	/// <summary>
 	/// 更新
@@ -29,30 +29,19 @@ public:
 	/// <param name= "viewProjection">ビュープロジェクション）</param>
 	void Draw(ViewProjection view);
 
-	///
-	///
-	///
-	void Fire();
-
-	///
-	///
-	///
-	void Approach();
-
-	///
-	///
-	/// 
-	void SetPlayer(Player* player) { player_ = player; }
-
 	/// <summary>
 	/// 
 	/// </summary>
 	/// <returns></returns>
 	void OnCollision();
 
+	void SetViewProjection(const ViewProjection* viewProjection) {
+		viewProjection_ = viewProjection;
+	}
+
 	Vector3 GetWorldPosition();
 
-	const std::list<EnemyBullet*>& GetBullets() const { return bullets_; }
+	//const std::list<EnemyBullet*>& GetBullets() const { return bullets_; }
 	/// <summary>
 	/// 行動フェーズ
 	/// </summary>
@@ -65,6 +54,10 @@ public:
 
 public:
 	WorldTransform worldTransform_;
+	WorldTransform worldTransformBody_;
+	WorldTransform worldTransformL_arm_;
+	WorldTransform worldTransformR_arm_;
+
 	Model* model_ = nullptr;
 	uint32_t textureHandle_;
 	float enemyInputFloat[3]{0, 0, 0};
@@ -76,7 +69,13 @@ public:
 	Player* player_ = nullptr;
 	//Vector3 Normalise;
 	
+	const ViewProjection* viewProjection_ = nullptr;
+
+	Vector3 enemyPosition = {0, 0, 0};
+	Vector3 bodyPosition = {0, 0, 0};
+	Vector3 l_amrPosition = {-0.8f, 1, 0};
+	Vector3 r_amrPosition = {0.8f, 1, 0};
 
 private:
-	int32_t startTimer = 0;
+	//int32_t startTimer = 0;
 };

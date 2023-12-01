@@ -14,6 +14,7 @@
 #include "RailCamera.h"
 #include "FollowCamera.h"
 #include "Ground.h"
+#include "Enemy.h"
 #include <memory>
 
     /// <summary>
@@ -69,8 +70,11 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelFighterHead_;
 	std::unique_ptr<Model> modelFighterL_arm_;
 	std::unique_ptr<Model> modelFighterR_arm_;
+	std::unique_ptr<Model> modelEnemyBody_;
+	std::unique_ptr<Model> modelEnemyL_arm_;
+	std::unique_ptr<Model> modelEnemyR_arm_;
 	
-	
+
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 
@@ -85,6 +89,7 @@ private: // メンバ変数
 	Model* modelSkydome_ = nullptr;
 	std::unique_ptr<Ground> ground_;
 	Model* modelGround_ = nullptr;
+	std::unique_ptr<Enemy> enemy_;
 	
 	Vector3 velocity_;
 

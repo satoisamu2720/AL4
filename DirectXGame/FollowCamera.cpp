@@ -32,7 +32,7 @@ void FollowCamera::Update() {
 		}
 		 rotateYMatrix_ = MakeRotateYMatrix(viewProjection_.rotation_.y);
 		offset_ = TransformNormal(offset_, rotateYMatrix_);
-
+		 enemyViewProjection_.rotation_.y += kRotSpeed;
 
 		// 座標をコピーしてオフセット分ずらす
 		viewProjection_.translation_ = Add(target_->translation_, offset_);
