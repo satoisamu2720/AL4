@@ -66,7 +66,7 @@ void GameScene::Initialize() {
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 
 
-	player_->(&followCamera_->GetViewProjection());
+	player_->SetViewProjection(&followCamera_->GetViewProjection());
 	enemy_->SetViewProjection(&followCamera_->GetEnemyViewProjection());
 
 	
