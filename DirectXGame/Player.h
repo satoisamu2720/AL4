@@ -41,8 +41,12 @@ public:
 	///
 	///
 	void InitializeFloatingGimmick(); 
+
 	void UpdateFloatingGimmick(); 
+
 	void DrawFloatingGimmick(); 
+
+	void BehaviorRootUpdate();
 	///
 	/// 
 	/// 
@@ -69,14 +73,15 @@ private:
 	WorldTransform worldTransformHead_;
 	WorldTransform worldTransformL_arm_;
 	WorldTransform worldTransformR_arm_;
+	WorldTransform worldTransformHammer_;
 
 	const ViewProjection* viewProjection_ = nullptr;
 
 
-	Model* modelFighterBody_;
+	/*Model* modelFighterBody_;
 	Model* modelFighterHead_;
 	Model* modelFighterL_arm_;
-	Model* modelFighterR_arm_;
+	Model* modelFighterR_arm_;*/
 
 	Input* input_ = nullptr;
 	float inputFloat[3]{0, 0, 0};
@@ -91,6 +96,7 @@ private:
 	Vector3 headPosition = {0, 1.4f, 0};
 	Vector3 l_amrPosition = {-0.5f, 1.4f, 0};
 	Vector3 r_amrPosition = {0.5f, 1.4f, 0};
+	Vector3 hammerPosition = {0.0f, 0.0f, 0.0f};
 	//モーション変数
 	float floatingParameter_ = 0.0f;
 	

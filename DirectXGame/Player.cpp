@@ -13,12 +13,14 @@ void Player::Initialize(
 	worldTransformHead_.Initialize();
 	worldTransformL_arm_.Initialize();
 	worldTransformR_arm_.Initialize();
+	worldTransformHammer_.Initialize();
 
 	worldTransform_.translation_ = playerPosition;
 	worldTransformBody_.translation_ = bodyPosition;
 	worldTransformHead_.translation_ = headPosition;
 	worldTransformL_arm_.translation_ = l_amrPosition;
 	worldTransformR_arm_.translation_ = r_amrPosition;
+	worldTransformHammer_.translation_ = hammerPosition;
 
 
 	worldTransformL_arm_.rotation_.x = 0.5f;
@@ -29,7 +31,7 @@ void Player::Initialize(
 	worldTransformHead_.parent_ = &worldTransform_;
 	worldTransformL_arm_.parent_ = &worldTransform_;
 	worldTransformR_arm_.parent_ = &worldTransform_;
-
+	worldTransformHammer_.parent_ = &worldTransform_;
 	//worldTransformHead_.translation_ = {0.0f, 0.2f, 0.0f};
 
 	input_ = Input::GetInstance();
@@ -39,7 +41,7 @@ void Player::Initialize(
 };
 
 void Player::Update() {
-
+	BehaviorRootUpdate();
 	// worldTransform_.TransferMatrix();
 
 	Vector3 move_ = {0, 0, 0};
@@ -58,6 +60,9 @@ void Player::Update() {
 	} else if (input_->PushKey(DIK_D)) {
 		move_.x += kCharacterSpeed;
 	}
+	if (input_->PushKey(DIK_SPACE)){
+		
+	}
 
 	// worldTransformHead_.translation_.y = 5;
 
@@ -74,7 +79,7 @@ void Player::Update() {
 	worldTransformHead_.UpdateMatrix();
 	worldTransformL_arm_.UpdateMatrix();
 	worldTransformR_arm_.UpdateMatrix();
-	
+	worldTransformHammer_.UpdateMatrix();
 
 	float imputFloat3[3] = {
 	    worldTransform_.translation_.x, worldTransform_.translation_.y,
@@ -106,6 +111,7 @@ void Player::Draw(ViewProjection view) {
 	models_[1]->Draw(worldTransformHead_, view);
 	models_[2]->Draw(worldTransformL_arm_, view);
 	models_[3]->Draw(worldTransformR_arm_, view);
+	models_[4]->Draw(worldTransformHammer_, view);
 }
 void Player::OnCollision() {}
 
@@ -135,4 +141,7 @@ void Player::UpdateFloatingGimmick() {
 	worldTransformL_arm_.rotation_.x+= std::cos(floatingParameter_) * amplitude;
 	worldTransformR_arm_.rotation_.x += std::cos(floatingParameter_) * amplitude;
 }
-void Player::DrawFloatingGimmick(){};
+void Player::DrawFloatingGimmick() {}
+
+
+void Player::BehaviorRootUpdate(){}

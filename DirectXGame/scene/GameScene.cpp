@@ -24,7 +24,7 @@ void GameScene::Initialize() {
 	modelEnemyBody_.reset(Model::CreateFromOBJ("needle_Body", true));
 	modelEnemyL_arm_.reset(Model::CreateFromOBJ("needle_L_arm", true));
 	modelEnemyR_arm_.reset(Model::CreateFromOBJ("needle_R_arm", true));
-
+	modelHammer_.reset(Model::CreateFromOBJ("hammer", true));
 
 	modelSkydome_ = Model::CreateFromOBJ("sky", true);
 	modelGround_ = Model::CreateFromOBJ("ground", true);
@@ -36,7 +36,8 @@ void GameScene::Initialize() {
 	    modelFighterBody_.get(), 
 		modelFighterHead_.get(), 
 		modelFighterL_arm_.get(),
-	    modelFighterR_arm_.get()
+	    modelFighterR_arm_.get(), 
+		modelHammer_.get(),
 	};
 
 	//敵キャラモデル
