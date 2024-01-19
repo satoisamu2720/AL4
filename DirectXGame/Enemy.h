@@ -7,6 +7,8 @@
 #include "assert.h"
 #include <list>
 #include "BaseCharacter.h"
+#include <optional>
+
 class Player;
 
 class Enemy : public BaseCharacter {
@@ -68,10 +70,10 @@ public:
 	static const int kFreInterval = 60;
 	Player* player_ = nullptr;
 	//Vector3 Normalise;
-	
+
 	const ViewProjection* viewProjection_ = nullptr;
 
-	Vector3 enemyPosition = {0, 0, 0};
+	Vector3 enemyPosition = {-30, 0, 30};
 	Vector3 bodyPosition = {0, 0, 0};
 	Vector3 l_amrPosition = {-0.8f, 1, 0};
 	Vector3 r_amrPosition = {0.8f, 1, 0};

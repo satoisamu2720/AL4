@@ -42,11 +42,18 @@ public:
 	///
 	void InitializeFloatingGimmick(); 
 
+	void BehaviorRootInitialize();
+
+	void BehaviorAttackInitialize();
+
 	void UpdateFloatingGimmick(); 
 
-	void DrawFloatingGimmick(); 
-
 	void BehaviorRootUpdate();
+
+	void BehaviorAttackUpdate();
+
+	void DrawFloatingGimmick(); 
+	
 	///
 	/// 
 	/// 
@@ -60,6 +67,10 @@ public:
 	
 	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 
+	enum class Behavior {
+		kRoot,//通常状態
+		kAttack,//攻撃中
+	};
 	
 	/// <summary>
 /// 
@@ -85,6 +96,8 @@ private:
 
 	Input* input_ = nullptr;
 	float inputFloat[3]{0, 0, 0};
+	Behavior behavior_ = Behavior::kRoot;
+	std::optional<Behavior> behaviorRequest_ = std::nullopt;
 	int StopTimer = 0;
 	RailCamera* railCamera_;
 	FollowCamera* followCamera_;
@@ -96,8 +109,12 @@ private:
 	Vector3 headPosition = {0, 1.4f, 0};
 	Vector3 l_amrPosition = {-0.5f, 1.4f, 0};
 	Vector3 r_amrPosition = {0.5f, 1.4f, 0};
-	Vector3 hammerPosition = {0.0f, 0.0f, 0.0f};
+	Vector3 hammerPosition = {1.0f, 1.0f, 0.0f};
 	//モーション変数
-	float floatingParameter_ = 0.0f;
+	float floatingRootParameter_ = 0.0f;
+	float floatingAttackParameter_ = 0.0f;
+
+	float attackTime = 0;
+	bool attackFlag = false;
 	
 };
