@@ -52,6 +52,9 @@
     <Filter Include="ソース ファイル\2d">
       <UniqueIdentifier>{814a0f6d-f847-4c45-856d-4688fa4c9e6c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="scenesWitching">
+      <UniqueIdentifier>{9c26aa15-f202-4078-a9ec-cad1223974f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -98,6 +101,18 @@
     </ClCompile>
     <ClCompile Include="BaseCharacter.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scenesWitching\ClearScene.cpp">
+      <Filter>scenesWitching</Filter>
+    </ClCompile>
+    <ClCompile Include="scenesWitching\GameStageScene.cpp">
+      <Filter>scenesWitching</Filter>
+    </ClCompile>
+    <ClCompile Include="scenesWitching\IScene.cpp">
+      <Filter>scenesWitching</Filter>
+    </ClCompile>
+    <ClCompile Include="scenesWitching\TitleScene.cpp">
+      <Filter>scenesWitching</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +229,18 @@
     </ClInclude>
     <ClInclude Include="BaseCharacter.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scenesWitching\ClearScene.h">
+      <Filter>scenesWitching</Filter>
+    </ClInclude>
+    <ClInclude Include="scenesWitching\GameStageScene.h">
+      <Filter>scenesWitching</Filter>
+    </ClInclude>
+    <ClInclude Include="scenesWitching\IScene.h">
+      <Filter>scenesWitching</Filter>
+    </ClInclude>
+    <ClInclude Include="scenesWitching\TitleScene.h">
+      <Filter>scenesWitching</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

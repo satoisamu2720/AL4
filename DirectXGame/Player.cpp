@@ -53,6 +53,10 @@ void Player::Update() {
 		case Player::Behavior::kAttack:
 			BehaviorAttackInitialize();
 			break;
+		case Player::Behavior::kAttackTwo:
+			BehaviorAttackTwoInitialize();
+			break;
+			
 		}
 		//振るまいリクエストをリセット
 		behaviorRequest_ = std::nullopt;
@@ -66,6 +70,9 @@ void Player::Update() {
 	case Player::Behavior::kAttack:
 			BehaviorAttackUpdate();
 		break;
+	case Player::Behavior::kAttackTwo:
+		    BehaviorAttackTwoUpdate();
+		    break;
 	}
 
 	// 行列更新
@@ -121,7 +128,7 @@ void Player::Draw(ViewProjection view) {
 	models_[2]->Draw(worldTransformL_arm_, view);
 	models_[3]->Draw(worldTransformR_arm_, view);
 	if (attackFlag == false) {
-		if (behavior_ == Behavior::kAttack) {
+		if (behavior_ == Behavior::kAttack || behavior_ == Behavior::kAttackTwo) {
 			models_[4]->Draw(worldTransformHammer_, view);
 		} 
 	} else {
@@ -159,11 +166,10 @@ void Player::UpdateFloatingGimmick() {
 	floatingRootParameter_ += step;
 	floatingRootParameter_ = std::fmod(floatingRootParameter_, 2.0f * (float)M_PI);
 
-	//const float amplitude = 0.02f;
-	//worldTransform_.translation_.y += std::sin(floatingRootParameter_) * amplitude;
-	//worldTransformHead_.translation_.y = std::sin(floatingParameter_) * amplitude;
-	/*worldTransformL_arm_.rotation_.x += std::cos(floatingRootParameter_) * amplitude;
-	worldTransformR_arm_.rotation_.x += std::cos(floatingRootParameter_) * amplitude;*/
+	const float amplitude = 0.02f;
+	
+	worldTransformL_arm_.rotation_.x += std::cos(floatingRootParameter_) * amplitude;
+	worldTransformR_arm_.rotation_.x += std::cos(floatingRootParameter_) * amplitude;
 }
 void Player::DrawFloatingGimmick() {
 	
@@ -189,8 +195,17 @@ void Player::BehaviorRootUpdate(){
 	} else if (input_->PushKey(DIK_D)) {
 		move_.x += kCharacterSpeed;
 	}
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (input_->PushKey(DIK_1)) {
+		mode = 1;
+	}
+	if (input_->PushKey(DIK_2)) {
+		mode = 2;
+	}
+	if (input_->TriggerKey(DIK_SPACE) && mode == 1) {
 		behaviorRequest_ = Behavior::kAttack;
+	}
+	if (input_->TriggerKey(DIK_SPACE) && mode == 2) {
+		behaviorRequest_ = Behavior::kAttackTwo;
 	}
 	// worldTransformHead_.translation_.y = 5;
 	move_ = TransformNormal(move_, MakeRotateYMatrix(viewProjection_->rotation_.y));
@@ -208,23 +223,57 @@ void Player::BehaviorAttackInitialize() {
 	worldTransformR_arm_.rotation_.x = -1.5f;
 	worldTransformR_arm_.rotation_.y = 0.0f;
 
-	floatingAttackParameter_ = 0.0f;
+	floatingAttackTwoParameter_ = 0.0f;
 }
 void Player::BehaviorAttackUpdate() { 
+	const uint16_t attackPeriod = 30;
+	attackTime++;
+	const float attackStep = 1.0f * (float)M_PI / attackPeriod;
+
+	floatingAttackTwoParameter_ += attackStep;
+	floatingAttackTwoParameter_ = std::fmod(floatingAttackTwoParameter_, 2.0f * (float)M_PI);
+
+	// const float amplitude = 0.5f;
+	const float armAmplitude = 0.06f;
+	const float hammerAmplitude = 0.08f;
+
+	//worldTransformL_arm_.rotation_.x -= std::cos(floatingAttackParameter_) * armAmplitude;
+	worldTransformR_arm_.rotation_.y -= std::cos(floatingAttackTwoParameter_) * armAmplitude;
+	worldTransformHammer_.rotation_.x -= std::cos(floatingAttackTwoParameter_) * hammerAmplitude;
+
+	if (attackTime >= 45) {
+		behaviorRequest_ = Player::Behavior::kRoot;
+		attackTime = 0;
+	}
+}
+
+void Player::BehaviorAttackTwoInitialize() {
+
+	worldTransformHammer_.rotation_.x = 1.0f;
+	worldTransformHammer_.rotation_.z = 0.0f;
+
+	worldTransform_.translation_.y = 0.0f;
+	worldTransformL_arm_.rotation_.x = -2.0f;
+	worldTransformR_arm_.rotation_.x = -2.0f;
+
+	floatingAttackTwoParameter_ = 0.0f;
+}
+void Player::BehaviorAttackTwoUpdate() {
 	const uint16_t attackPeriod = 60;
 	attackTime++;
 	const float attackStep = 1.0f * (float)M_PI / attackPeriod;
 
-	floatingAttackParameter_ += attackStep;
-	floatingAttackParameter_ = std::fmod(floatingAttackParameter_, 1.0f * (float)M_PI);
+	floatingAttackTwoParameter_ += attackStep;
+	floatingAttackTwoParameter_ = std::fmod(floatingAttackTwoParameter_, 1.1f * (float)M_PI);
 
-	// const float amplitude = 0.5f;
 	const float armAmplitude = 0.08f;
 	const float hammerAmplitude = 0.08f;
 
-	//worldTransformL_arm_.rotation_.x -= std::cos(floatingAttackParameter_) * armAmplitude;
-	worldTransformR_arm_.rotation_.y -= std::cos(floatingAttackParameter_) * armAmplitude;
-	worldTransformHammer_.rotation_.x -= std::cos(floatingAttackParameter_) * hammerAmplitude;
+	// worldTransformL_arm_.rotation_.x -= std::cos(floatingAttackParameter_) * armAmplitude;
+	worldTransformL_arm_.rotation_.x -= std::cos(floatingAttackTwoParameter_) * armAmplitude;
+	worldTransformR_arm_.rotation_.x -= std::cos(floatingAttackTwoParameter_) * armAmplitude;
+	// worldTransformR_arm_.rotation_.y -= std::cos(floatingAttackParameter_) * armAmplitude;
+	worldTransformHammer_.rotation_.x -= std::cos(floatingAttackTwoParameter_) * hammerAmplitude;
 
 	if (attackTime >= 90) {
 		behaviorRequest_ = Player::Behavior::kRoot;

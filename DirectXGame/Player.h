@@ -46,11 +46,15 @@ public:
 
 	void BehaviorAttackInitialize();
 
+	void BehaviorAttackTwoInitialize();
+
 	void UpdateFloatingGimmick(); 
 
 	void BehaviorRootUpdate();
 
 	void BehaviorAttackUpdate();
+
+	void BehaviorAttackTwoUpdate();
 
 	void DrawFloatingGimmick(); 
 	
@@ -69,7 +73,9 @@ public:
 
 	enum class Behavior {
 		kRoot,//通常状態
-		kAttack,//攻撃中
+		kAttack,//攻撃1
+		kAttackTwo, // 攻撃2
+
 	};
 	
 	/// <summary>
@@ -88,12 +94,6 @@ private:
 
 	const ViewProjection* viewProjection_ = nullptr;
 
-
-	/*Model* modelFighterBody_;
-	Model* modelFighterHead_;
-	Model* modelFighterL_arm_;
-	Model* modelFighterR_arm_;*/
-
 	Input* input_ = nullptr;
 	float inputFloat[3]{0, 0, 0};
 	Behavior behavior_ = Behavior::kRoot;
@@ -109,12 +109,14 @@ private:
 	Vector3 headPosition = {0, 1.4f, 0};
 	Vector3 l_amrPosition = {-0.5f, 1.4f, 0};
 	Vector3 r_amrPosition = {0.5f, 1.4f, 0};
-	Vector3 hammerPosition = {1.0f, 1.0f, 0.0f};
+	Vector3 hammerPosition = {0.0f, 1.0f, 0.0f};
 	//モーション変数
 	float floatingRootParameter_ = 0.0f;
-	float floatingAttackParameter_ = 0.0f;
+	float floatingAttackTwoParameter_ = 0.0f;
 
 	float attackTime = 0;
 	bool attackFlag = false;
+
+	float mode = 1;
 	
 };
