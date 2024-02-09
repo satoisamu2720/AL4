@@ -40,6 +40,7 @@ public:
 	void SetViewProjection(const ViewProjection* viewProjection) {
 		viewProjection_ = viewProjection;
 	}
+	void SetFlag(bool flagt) {  flag = flagt; }
 
 	Vector3 GetWorldPosition();
 
@@ -73,11 +74,13 @@ public:
 
 	const ViewProjection* viewProjection_ = nullptr;
 
-	Vector3 enemyPosition = {-30, 0, 30};
+	Vector3 enemyPosition = {-30, 1, 30};
 	Vector3 bodyPosition = {0, 0, 0};
 	Vector3 l_amrPosition = {-0.8f, 1, 0};
 	Vector3 r_amrPosition = {0.8f, 1, 0};
 
 private:
 	//int32_t startTimer = 0;
+
+	bool flag = false;
 };

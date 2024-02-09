@@ -17,11 +17,17 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	textureHandle_ = TextureManager::Load("genshin.png");
 
+
+	titleTextureHandle_ = TextureManager::Load("title.png");
+	titleSprite_ = Sprite::Create(titleTextureHandle_, {0, 0});
+
+	uint32_t fadeTexHandle = TextureManager::Load("black.png");
+	fadeSprrite_ = Sprite::Create(fadeTexHandle, {0, 0});
 	modelFighterBody_.reset(Model::CreateFromOBJ("float_Body", true));
 	modelFighterHead_.reset(Model::CreateFromOBJ("float_Head", true));
 	modelFighterL_arm_.reset(Model::CreateFromOBJ("float_L_arm", true));
 	modelFighterR_arm_.reset(Model::CreateFromOBJ("float_R_arm", true));
-	modelEnemyBody_.reset(Model::CreateFromOBJ("needle_Body", true));
+	modelEnemyBody_.reset(Model::CreateFromOBJ("enemy", true));
 	modelEnemyL_arm_.reset(Model::CreateFromOBJ("needle_L_arm", true));
 	modelEnemyR_arm_.reset(Model::CreateFromOBJ("needle_R_arm", true));
 	modelHammer_.reset(Model::CreateFromOBJ("hammer", true));
@@ -79,14 +85,31 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 
 }
-
 void GameScene::Update() {
+
+	switch (sceneMode_) {
+	case 0:
+		GamePlayUpdate();
+		break;
+	case 1:
+		TitleUpdate();
+		break;
+	case 2:
+		GameOverUpdate();
+		break;
+	case 3:
+		GameClearUpdate();
+		break;
+	}
+}
+
+void GameScene::GamePlayUpdate() {
 	player_->Update(); 
 	skydome_->Update();
 	enemy_->Update();
 	ground_->Update();
 	
-	
+	Collision();
 	
 	debugCamera_->Update();
 	//デバックカメラのifdef
@@ -99,8 +122,8 @@ void GameScene::Update() {
 		
 	}
     #endif
-	
-
+	fadeColor_.w -= 0.005f;
+	fadeSprrite_->SetColor(fadeColor_);
 	
 	//カメラ処理
 	if (isDebugCameraActive_ == true) {
@@ -120,11 +143,59 @@ void GameScene::Update() {
 		viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;*/
 		viewProjection_.TransferMatrix();
 
-		
-
+		if (timeFlag == true) {
+			time++;
+		}
+			if (time >= 60) {
+				timeFlag = false;
+				time = 0;
+			    sceneMode_ = 3;
+			}
+		  
 	}
 	
 }
+    void GameScene::Collision() {
+	
+	// プレイヤー攻撃と敵の腕判定
+	
+
+		// 差を求める
+	float dx = abs(player_->GetAttackWorldPosition().x - enemy_->GetWorldPosition().x);
+	float dz = abs(player_->GetAttackWorldPosition().z - enemy_->GetWorldPosition().z);
+	float dy = abs(player_->GetAttackWorldPosition().y - enemy_->GetWorldPosition().y);
+		// 衝突したら
+		float dist = dx * dx + dy * dy + dz * dz;
+		dist = sqrtf(dist);
+		if (dist <= 10) {
+		timeFlag = true;
+		enemy_->SetFlag(enemyflag);
+		}
+	}
+    
+    void GameScene::TitleUpdate() {
+
+	    if (input_->TriggerKey(DIK_SPACE)) {
+		// リセット
+		sceneMode_ = 0;
+	    }
+    }
+
+    void GameScene::GameOverUpdate() {
+	    if (input_->TriggerKey(DIK_SPACE)) {
+		Initialize();
+		sceneMode_ = 1;
+		enemyflag = false;
+	    }
+    }
+    void GameScene::GameClearUpdate() {
+	    if (input_->TriggerKey(DIK_SPACE)) {
+		Initialize();
+		sceneMode_ = 1;
+		enemyflag = false;
+	    }
+    }
+
 
 	void GameScene::Draw() {
 
@@ -164,16 +235,28 @@ void GameScene::Update() {
 
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(commandList);
-
+	if (sceneMode_ == 0) {
+		fadeSprrite_->Draw();
+	}
+	if (sceneMode_ == 1) {
+		titleSprite_->Draw();
+	}
+	if (sceneMode_ == 2) {
+		titleSprite_->Draw();
+	}
+	if (sceneMode_ == 3) {
+		titleSprite_->Draw();
+	}
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 
 	/// </summary>
-
+	
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
 
 }
+
 
 	

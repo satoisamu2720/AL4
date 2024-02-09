@@ -99,14 +99,14 @@ void Player::Update() {
 	float inputAttackTime = attackTime;
 
 	// デバッグ
-	ImGui::Begin("Debug");
+	/*ImGui::Begin("Debug");
 	ImGui::Text("Toggle Camera Flag :  LEFT SHIFT key");
 	ImGui::SliderFloat3("player", imputFloatR_arm, -3.0f, 0.0f);
 	ImGui::SliderFloat3("HammerR", imputFloatHammerR, 0.0f, 3.0f);
 	ImGui::SliderFloat3("Hammer", imputFloatHammer, -3.0f, 3.0f);
 	ImGui::InputFloat("AttackTime", &inputAttackTime);
 	ImGui::Checkbox(" AttackFlag \n false = Right \n true = Left", &attackFlag);
-	ImGui::End();
+	ImGui::End();*/
 	worldTransformR_arm_.rotation_.x = imputFloatR_arm[0];
 	worldTransformR_arm_.rotation_.y = imputFloatR_arm[1];
 	worldTransformR_arm_.rotation_.z = imputFloatR_arm[2];
@@ -144,6 +144,17 @@ Vector3 Player::GetWorldPosition() {
 	worldPos.x = worldTransform_.matWorld_.m[3][0];
 	worldPos.y = worldTransform_.matWorld_.m[3][1];
 	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
+}
+
+Vector3 Player::GetAttackWorldPosition() {
+
+	Vector3 worldPos;
+
+	worldPos.x = worldTransformHammer_.matWorld_.m[3][0];
+	worldPos.y = worldTransformHammer_.matWorld_.m[3][1];
+	worldPos.z = worldTransformHammer_.matWorld_.m[3][2];
 
 	return worldPos;
 }

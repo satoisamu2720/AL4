@@ -43,8 +43,8 @@ void FollowCamera::Update() {
 	viewProjection_.UpdateMatrix();
 
 	
-	ImGui::Begin("offset Camera");
+	/*ImGui::Begin("offset Camera");
 	ImGui::DragFloat3("Camera Position", &viewProjection_.translation_.x, 0.01f);
 	ImGui::DragFloat3("Camera Rotation", &viewProjection_.rotation_.x, 0.01f);
-	ImGui::End();
+	ImGui::End();*/
 }

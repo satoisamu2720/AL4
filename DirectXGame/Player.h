@@ -70,6 +70,7 @@ public:
 	}
 	
 	const WorldTransform& GetWorldTransform() { return worldTransform_; }
+	Vector3 GetAttackWorldPosition();
 
 	enum class Behavior {
 		kRoot,//通常状態
@@ -106,7 +107,7 @@ private:
 	Vector3 velocity_ = {0, 0, 0};
 	Vector3 playerPosition = {0, 0, 0};
 	Vector3 bodyPosition = {0,0,0};
-	Vector3 headPosition = {0, 1.4f, 0};
+	Vector3 headPosition = {0, 2.0f, 0};
 	Vector3 l_amrPosition = {-0.5f, 1.4f, 0};
 	Vector3 r_amrPosition = {0.5f, 1.4f, 0};
 	Vector3 hammerPosition = {0.0f, 1.0f, 0.0f};

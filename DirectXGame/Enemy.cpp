@@ -52,9 +52,11 @@ void Enemy::Update() {
 };
 
 void Enemy::Draw(const ViewProjection viewProjection) {
+	if (flag == false) {
 	models_[0]->Draw(worldTransformBody_, viewProjection);
-	models_[1]->Draw(worldTransformL_arm_, viewProjection);
-	models_[2]->Draw(worldTransformR_arm_, viewProjection);
+	}
+	//models_[1]->Draw(worldTransformL_arm_, viewProjection);
+	//models_[2]->Draw(worldTransformR_arm_, viewProjection);
 };
 
 void Enemy::OnCollision() {}

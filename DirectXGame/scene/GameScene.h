@@ -16,6 +16,7 @@
 #include "Ground.h"
 #include "Enemy.h"
 #include <memory>
+#include "Sprite.h"
 
     /// <summary>
 /// ゲームシーン
@@ -51,10 +52,15 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+
+	void Collision();
 	/// <summary>
 	/// 
 	/// </summary>
-	
+	void GamePlayUpdate();
+	void TitleUpdate();
+	void GameOverUpdate();
+	void GameClearUpdate();
 
 private: // メンバ変数
 	// テクスチャハンドル
@@ -65,6 +71,9 @@ private: // メンバ変数
 
 	uint32_t textureHandle_ = 0;
 	Sprite* sprite_ = nullptr;
+
+	uint32_t titleTextureHandle_ = 0;
+	Sprite* titleSprite_ = nullptr;
 
 	std::unique_ptr<Model> modelFighterBody_;
 	std::unique_ptr<Model> modelFighterHead_;
@@ -95,11 +104,16 @@ private: // メンバ変数
 	Vector3 velocity_;
 
 	//const WorldTransform& GetWorldTransform() { return matProjection; }
-
+	int sceneMode_ = 1;
 	bool isDebugCameraActive_ = false;
 	std::unique_ptr<RailCamera> railCamera_;
 	std::unique_ptr<FollowCamera> followCamera_;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
+	Sprite* fadeSprrite_ = nullptr;
+	Vector4 fadeColor_ = {1.0f, 1.0f, 1.0f, 1.0f};
+	bool enemyflag = true;
+	bool timeFlag = false;
+	float time = 0;
 };
