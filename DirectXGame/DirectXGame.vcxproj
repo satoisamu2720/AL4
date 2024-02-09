@@ -118,10 +118,6 @@
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="FollowCamera.cpp" />
     <ClCompile Include="RailCamera.cpp" />
-    <ClCompile Include="scenesWitching\ClearScene.cpp" />
-    <ClCompile Include="scenesWitching\GameStageScene.cpp" />
-    <ClCompile Include="scenesWitching\IScene.cpp" />
-    <ClCompile Include="scenesWitching\TitleScene.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="WorldTransform.EX.cpp" />
@@ -162,10 +158,6 @@
     <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="FollowCamera.h" />
     <ClInclude Include="RailCamera.h" />
-    <ClInclude Include="scenesWitching\ClearScene.h" />
-    <ClInclude Include="scenesWitching\GameStageScene.h" />
-    <ClInclude Include="scenesWitching\IScene.h" />
-    <ClInclude Include="scenesWitching\TitleScene.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="Skydome.h" />
     <ClInclude Include="VectraCalculation.h" />
