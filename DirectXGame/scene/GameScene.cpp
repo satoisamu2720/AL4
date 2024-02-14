@@ -145,7 +145,7 @@ void GameScene::GamePlayUpdate() {
 
 		if (timeFlag == true) {
 			time++;
-			fadeColor_.w += 0.01f;
+			fadeColor_.w += 0.05f;
 			fadeSprrite_->SetColor(fadeColor_);
 		}
 			if (time >= 60) {
