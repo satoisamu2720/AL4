@@ -145,6 +145,8 @@ void GameScene::GamePlayUpdate() {
 
 		if (timeFlag == true) {
 			time++;
+			fadeColor_.w += 0.01f;
+			fadeSprrite_->SetColor(fadeColor_);
 		}
 			if (time >= 60) {
 				timeFlag = false;
@@ -184,15 +186,15 @@ void GameScene::GamePlayUpdate() {
     void GameScene::GameOverUpdate() {
 	    if (input_->TriggerKey(DIK_SPACE)) {
 		Initialize();
-		sceneMode_ = 1;
 		enemyflag = false;
+		sceneMode_ = 1;
 	    }
     }
     void GameScene::GameClearUpdate() {
 	    if (input_->TriggerKey(DIK_SPACE)) {
 		Initialize();
-		sceneMode_ = 1;
 		enemyflag = false;
+		sceneMode_ = 1;
 	    }
     }
 
