@@ -54,13 +54,28 @@ public: // メンバ関数
 
 
 	void Collision();
+
+	void Reset();
 	/// <summary>
 	/// 
 	/// </summary>
+
+	void GamePlayInitialize();
+	void TitleInitialize();
+	void GameOverInitialize();
+	void GameClearInitialize();
+
 	void GamePlayUpdate();
 	void TitleUpdate();
 	void GameOverUpdate();
 	void GameClearUpdate();
+
+	enum class Behavior {
+		Title,      // 通常状態
+		GamePlay, // 攻撃1
+		GameOver, // 攻撃2
+		GameClear
+	};
 
 private: // メンバ変数
 	// テクスチャハンドル
@@ -74,6 +89,15 @@ private: // メンバ変数
 
 	uint32_t titleTextureHandle_ = 0;
 	Sprite* titleSprite_ = nullptr;
+
+	uint32_t titleTwoTextureHandle_ = 0;
+	Sprite* titleTwoSprite_ = nullptr;
+
+	uint32_t clearTextureHandle_ = 0;
+	Sprite* clearSprite_ = nullptr;
+
+	std::vector<Model*> playerModels;
+	std::vector<Model*> enemyModels;
 
 	std::unique_ptr<Model> modelFighterBody_;
 	std::unique_ptr<Model> modelFighterHead_;
@@ -104,16 +128,19 @@ private: // メンバ変数
 	Vector3 velocity_;
 
 	//const WorldTransform& GetWorldTransform() { return matProjection; }
-	int sceneMode_ = 1;
-	bool isDebugCameraActive_ = false;
+	Behavior behavior_ = Behavior::Title;
+	std::optional<Behavior> behaviorRequest_ = std::nullopt;
+	bool isDebugCameraActive_ = true;
 	std::unique_ptr<RailCamera> railCamera_;
 	std::unique_ptr<FollowCamera> followCamera_;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
 	Sprite* fadeSprrite_ = nullptr;
-	Vector4 fadeColor_ = {1.0f, 1.0f, 1.0f, 1.0f};
-	bool enemyflag = true;
+	Vector4 fadeColor_ = {1.0f, 1.0f, 1.0f, 0.0f};
+	 Vector2 titlePos_ = {0.0f, 0.0f};
+	 Vector2 titleTwoPos_ = {0.0f, 0.0f};
+	bool enemyflag = false;
 	bool timeFlag = false;
 	float time = 0;
 };

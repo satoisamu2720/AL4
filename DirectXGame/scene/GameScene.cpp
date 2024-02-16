@@ -21,6 +21,12 @@ void GameScene::Initialize() {
 	titleTextureHandle_ = TextureManager::Load("title.png");
 	titleSprite_ = Sprite::Create(titleTextureHandle_, {0, 0});
 
+	titleTwoTextureHandle_ = TextureManager::Load("title2.png");
+	titleTwoSprite_ = Sprite::Create(titleTwoTextureHandle_, {0, 0});
+
+	clearTextureHandle_ = TextureManager::Load("clear.png");
+	clearSprite_ = Sprite::Create(clearTextureHandle_, {0, 0});
+
 	uint32_t fadeTexHandle = TextureManager::Load("black.png");
 	fadeSprrite_ = Sprite::Create(fadeTexHandle, {0, 0});
 	modelFighterBody_.reset(Model::CreateFromOBJ("float_Body", true));
@@ -38,7 +44,7 @@ void GameScene::Initialize() {
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 	//自キャラモデル
-	std::vector<Model*> playerModels = {
+	 playerModels = {
 	    modelFighterBody_.get(), 
 		modelFighterHead_.get(), 
 		modelFighterL_arm_.get(),
@@ -47,7 +53,7 @@ void GameScene::Initialize() {
 	};
 
 	//敵キャラモデル
-	std::vector<Model*> enemyModels = {
+	 enemyModels = {
 	    modelEnemyBody_.get(),
 		modelEnemyL_arm_.get(), 
 		modelEnemyR_arm_.get()
@@ -66,17 +72,17 @@ void GameScene::Initialize() {
 	ground_->Initialize(modelGround_, {1.0f,0.0f,0.0f});
 	
 	railCamera_ = std::make_unique<RailCamera>();
-	railCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
+	railCamera_->Initialize({0.0f, 2.0f, 6.0f}, {0.0f, -3.15f, 0.0f});
 
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
-	followCamera_->SetTarget(&player_->GetWorldTransform());
+	
 
 
 	player_->SetViewProjection(&followCamera_->GetViewProjection());
 	enemy_->SetViewProjection(&followCamera_->GetEnemyViewProjection());
 
-	
+	fadeSprrite_->SetColor(fadeColor_);
 
 	debugCamera_ = std::make_unique<DebugCamera>(1280,720);
 	//軸方向表示の表示を有効にする
@@ -87,114 +93,188 @@ void GameScene::Initialize() {
 }
 void GameScene::Update() {
 
-	switch (sceneMode_) {
-	case 0:
-		GamePlayUpdate();
-		break;
-	case 1:
+	if (behaviorRequest_) {
+		// 振るまいを変更する
+		behavior_ = behaviorRequest_.value();
+		// 各振るまいごとの初期化を実行
+		switch (behavior_) {
+		case Behavior::Title:
+			TitleInitialize();
+			break;
+		case Behavior::GamePlay:
+			GamePlayInitialize();
+			break;
+		case Behavior::GameOver:
+			GameOverInitialize();
+			break;
+		case Behavior::GameClear:
+			GameClearInitialize();
+			break;
+		}
+		// 振るまいリクエストをリセット
+		behaviorRequest_ = std::nullopt;
+	}
+
+	switch (behavior_) {
+	case Behavior::Title:
 		TitleUpdate();
 		break;
-	case 2:
+	case Behavior::GamePlay:
+		GamePlayUpdate();
+		break;
+	case Behavior::GameOver:
 		GameOverUpdate();
 		break;
-	case 3:
+	case Behavior::GameClear:
 		GameClearUpdate();
 		break;
 	}
 }
+void GameScene::TitleInitialize() {
+	fadeColor_ = {1.0f, 1.0f, 1.0f, 0.0f};
+	fadeSprrite_->SetColor(fadeColor_);
+	titlePos_ = {0.0f, 0.0f};
+	titleSprite_->SetPosition(titlePos_);
+	titleTwoPos_ = {0.0f, 0.0f};
+	titleTwoSprite_->SetPosition(titleTwoPos_);
+}
 
-void GameScene::GamePlayUpdate() {
-	player_->Update(); 
-	skydome_->Update();
-	enemy_->Update();
-	ground_->Update();
-	
-	Collision();
-	
-	debugCamera_->Update();
-	//デバックカメラのifdef
+void GameScene::TitleUpdate() {
 
-	#ifdef _DEBUG
-	if (input_->TriggerKey(DIK_LSHIFT) && isDebugCameraActive_ == false) {
-		isDebugCameraActive_ = true;
-	} else if (input_->TriggerKey(DIK_LSHIFT) && isDebugCameraActive_ == true) {
-		isDebugCameraActive_ = false;
+	
+
+	if (input_->TriggerKey(DIK_SPACE)) {
+		timeFlag = true;
 		
 	}
-    #endif
+	player_->TitleUpdate();
+	ground_->Update();
+
+	railCamera_->Update();
+	railCamera_->SetTarget(&player_->GetWorldTransform());
+	viewProjection_.matView = railCamera_->GetViewProjection().matView;
+	viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
+	viewProjection_.TransferMatrix();
+	if (timeFlag == true) {
+		time++;
+		
+	}
+	if (time >= 60) {
+		fadeColor_.w += 0.01f;
+		fadeSprrite_->SetColor(fadeColor_);
+		titlePos_.x -= 1.0f;
+		titlePos_.y -= 1.0f;
+		titleSprite_->SetPosition(titlePos_);
+		titleTwoPos_.x += 1.0f;
+		titleTwoPos_.y -= 1.0f;
+		titleTwoSprite_->SetPosition(titleTwoPos_);
+	}
+	if (time >= 120) {
+		time = 0;
+		timeFlag = false;
+		behaviorRequest_ = Behavior::GamePlay;
+	}
+}
+void GameScene::GamePlayInitialize() {
+	fadeColor_ = {1.0f, 1.0f, 1.0f, 1.0f};
+	fadeSprrite_->SetColor(fadeColor_);
+}
+
+
+
+void GameScene::GamePlayUpdate() {
+	
+	player_->Update(); 
+	Collision();
+
+	enemy_->Update();
+	skydome_->Update();
+	ground_->Update();
+	
+	
+	//debugCamera_->Update();
+	//デバックカメラのifdef
+
 	fadeColor_.w -= 0.005f;
 	fadeSprrite_->SetColor(fadeColor_);
 	
-	//カメラ処理
-	if (isDebugCameraActive_ == true) {
-		debugCamera_->Update();
-		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-		//ビュープロジェクション行列の転送
-		viewProjection_.TransferMatrix();
-	} else {
 		followCamera_->Update();
-		//railCamera_->Update();
-
 		viewProjection_.matView = followCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
-
-		/*viewProjection_.matView = railCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;*/
 		viewProjection_.TransferMatrix();
-
-		if (timeFlag == true) {
-			time++;
-			fadeColor_.w += 0.05f;
-			fadeSprrite_->SetColor(fadeColor_);
-		}
-			if (time >= 60) {
-				timeFlag = false;
-				time = 0;
-			    sceneMode_ = 3;
-			}
-		  
+	    followCamera_->SetTarget(&player_->GetWorldTransform());
+		
+	
+	if (timeFlag == true) {
+		time++;
+		fadeColor_.w += 0.02f;
+		fadeSprrite_->SetColor(fadeColor_);
 	}
-	
+	if (time >= 120) {
+		time = 0;
+		timeFlag = false;
+		behaviorRequest_ = Behavior::GameClear;
+	}
 }
-    void GameScene::Collision() {
-	
+void GameScene::Collision() {
+
 	// プレイヤー攻撃と敵の腕判定
-	
+
+	if (player_->GetAttackFlag() == true) {
 
 		// 差を求める
-	float dx = abs(player_->GetAttackWorldPosition().x - enemy_->GetWorldPosition().x);
-	float dz = abs(player_->GetAttackWorldPosition().z - enemy_->GetWorldPosition().z);
-	float dy = abs(player_->GetAttackWorldPosition().y - enemy_->GetWorldPosition().y);
+		float dx = abs(player_->GetAttackWorldPosition().x - enemy_->GetWorldPosition().x);
+		float dz = abs(player_->GetAttackWorldPosition().z - enemy_->GetWorldPosition().z);
+		float dy = abs(player_->GetAttackWorldPosition().y - enemy_->GetWorldPosition().y);
 		// 衝突したら
 		float dist = dx * dx + dy * dy + dz * dz;
 		dist = sqrtf(dist);
 		if (dist <= 10) {
-		timeFlag = true;
-		enemy_->SetFlag(enemyflag);
+			timeFlag = true;
+			enemyflag = true;
+			enemy_->SetFlag(enemyflag);
 		}
 	}
-    
-    void GameScene::TitleUpdate() {
+}
 
-	    if (input_->TriggerKey(DIK_SPACE)) {
-		// リセット
-		sceneMode_ = 0;
-	    }
-    }
+    void GameScene::Reset() {
+	
+	
+	    player_->Initialize(playerModels);
+	    enemy_->Initialize(enemyModels);
+	    followCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
+	    followCamera_->SetTarget(&player_->GetWorldTransform());
+
+	    player_->SetViewProjection(&followCamera_->GetViewProjection());
+	    enemy_->SetViewProjection(&followCamera_->GetEnemyViewProjection());
+
+		worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
+
+	    enemyflag = false;
+	    fadeColor_.w = 0.0f;
+	    enemy_->SetFlag(enemyflag);
+	    time = 0;
+	    timeFlag = false;
+	    behaviorRequest_ = Behavior::Title;
+	
+	}
+
+    
+
+    void GameScene::GameOverInitialize() {}
+
+    void GameScene::GameClearInitialize() {}
+    
+   
 
     void GameScene::GameOverUpdate() {
 	    if (input_->TriggerKey(DIK_SPACE)) {
-		Initialize();
-		enemyflag = false;
-		sceneMode_ = 1;
+		Reset();
 	    }
     }
     void GameScene::GameClearUpdate() {
 	    if (input_->TriggerKey(DIK_SPACE)) {
-		Initialize();
-		enemyflag = false;
-		sceneMode_ = 1;
+		Reset();
 	    }
     }
 
@@ -227,27 +307,38 @@ void GameScene::GamePlayUpdate() {
 	/// </summary>
 
 	// 3Dオブジェクト描画後処理
-	player_->Draw(viewProjection_);
-	skydome_->Draw(viewProjection_);
-	ground_->Draw(viewProjection_);
-	enemy_->Draw(viewProjection_);
+	if (behavior_ == Behavior::GamePlay) {
+		player_->Draw(viewProjection_);
+		skydome_->Draw(viewProjection_);
+		ground_->Draw(viewProjection_);
+		enemy_->Draw(viewProjection_);
+	}
+	
+	if (behavior_ == Behavior::Title) {
+		player_->Draw(viewProjection_);
+		skydome_->Draw(viewProjection_);
+		ground_->Draw(viewProjection_);
+		//enemy_->Draw(viewProjection_);
+	}
 	Model::PostDraw();
 
 
 
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(commandList);
-	if (sceneMode_ == 0) {
+	if (behavior_ == Behavior::GamePlay) {
 		fadeSprrite_->Draw();
 	}
-	if (sceneMode_ == 1) {
+	if (behavior_ == Behavior::Title) {
+		titleSprite_->Draw();
+		titleTwoSprite_->Draw();
+		fadeSprrite_->Draw();
+	}
+	if (behavior_ == Behavior::GameOver) {
 		titleSprite_->Draw();
 	}
-	if (sceneMode_ == 2) {
-		titleSprite_->Draw();
-	}
-	if (sceneMode_ == 3) {
-		titleSprite_->Draw();
+	if (behavior_ == Behavior::GameClear) {
+		clearSprite_->Draw();
 	}
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる

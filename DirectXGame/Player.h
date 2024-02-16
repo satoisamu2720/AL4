@@ -33,6 +33,8 @@ public:
 	///
 	void Update();
 
+	void TitleUpdate();
+
 	///
 	///
 	///
@@ -44,6 +46,8 @@ public:
 
 	void BehaviorRootInitialize();
 
+	void TitleBehaviorRootInitialize();
+
 	void BehaviorAttackInitialize();
 
 	void BehaviorAttackTwoInitialize();
@@ -51,6 +55,8 @@ public:
 	void UpdateFloatingGimmick(); 
 
 	void BehaviorRootUpdate();
+
+	void TitleBehaviorRootUpdate();
 
 	void BehaviorAttackUpdate();
 
@@ -64,6 +70,8 @@ public:
 	void OnCollision();
 	
 	Vector3  GetWorldPosition();
+
+	bool GetAttackFlag() { return attackFlag; }
 
 	void SetViewProjection(const ViewProjection* viewProjection) {
 		viewProjection_ = viewProjection;

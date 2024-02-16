@@ -2,7 +2,7 @@
 
 
 void RailCamera::Initialize(const Vector3& position, const Vector3& rotation) {
-	worldTransform_.scale_ = {1.0f, 1.0f, 10.0f};
+	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_ = rotation;
 
@@ -16,9 +16,11 @@ void RailCamera::Update() {
 	    {1.0f, 1.0f, 1.0f}, worldTransform_.rotation_, worldTransform_.translation_);
 
 	viewProjection_.matView = Inverse(worldTransform_.matWorld_);
+	
+	//viewProjection_.translation_ = Add(target_->translation_, worldTransform_.translation_);
 
-	ImGui::Begin("Rail Camera");
-	ImGui::DragFloat3("Camera Position", &worldTransform_.translation_.x, 0.01f);
-	ImGui::DragFloat3("Camera Rotation", &worldTransform_.rotation_.x, 0.01f);
-	ImGui::End();
+	/*ImGui::Begin("Rail Camera");
+	ImGui::DragFloat3("Camera Position", &worldTransform_.translation_.x, 0.1f);
+	ImGui::DragFloat3("Camera Rotation", &worldTransform_.rotation_.x, 0.1f);
+	ImGui::End();*/
 }

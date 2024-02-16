@@ -121,19 +121,54 @@ void Player::Update() {
 
 }
 
+void Player::TitleUpdate() {
+	if (behaviorRequest_) {
+		    // 振るまいを変更する
+		    behavior_ = behaviorRequest_.value();
+		    // 各振るまいごとの初期化を実行
+		    switch (behavior_) {
+		    case Player::Behavior::kRoot:
+		    default:
+			TitleBehaviorRootInitialize();
+			break;
+		    case Player::Behavior::kAttackTwo:
+			BehaviorAttackTwoInitialize();
+			break;
+		    }
+		    // 振るまいリクエストをリセット
+		    behaviorRequest_ = std::nullopt;
+	}
+
+	switch (behavior_) {
+	case Player::Behavior::kRoot:
+	default:
+		    TitleBehaviorRootUpdate();
+		    break;
+	case Player::Behavior::kAttackTwo:
+		    BehaviorAttackTwoUpdate();
+		    break;
+	}
+
+// 行列更新
+	worldTransform_.UpdateMatrix();
+	worldTransformBody_.UpdateMatrix();
+	worldTransformHead_.UpdateMatrix();
+	worldTransformL_arm_.UpdateMatrix();
+	worldTransformR_arm_.UpdateMatrix();
+	worldTransformHammer_.UpdateMatrix();
+}
+
 void Player::Draw(ViewProjection view) {
 
 	models_[0]->Draw(worldTransformBody_, view);
 	models_[1]->Draw(worldTransformHead_, view);
 	models_[2]->Draw(worldTransformL_arm_, view);
 	models_[3]->Draw(worldTransformR_arm_, view);
-	if (attackFlag == false) {
+	if (attackFlag == true) {
 		if (behavior_ == Behavior::kAttack || behavior_ == Behavior::kAttackTwo) {
 			models_[4]->Draw(worldTransformHammer_, view);
 		} 
-	} else {
-		models_[4]->Draw(worldTransformHammer_, view);
-	}
+	} 
 }
 void Player::OnCollision() {}
 
@@ -147,6 +182,8 @@ Vector3 Player::GetWorldPosition() {
 
 	return worldPos;
 }
+
+
 
 Vector3 Player::GetAttackWorldPosition() {
 
@@ -170,6 +207,16 @@ void Player::BehaviorRootInitialize() {
 	 floatingRootParameter_ = 0.0f;
 	
 }
+void Player::TitleBehaviorRootInitialize() {
+	 worldTransform_.translation_.y = 0.0f;
+	 worldTransformL_arm_.rotation_.x = 0.0f;
+	 worldTransformR_arm_.rotation_.x = 0.0f;
+	 worldTransformL_arm_.rotation_.y = 0.0f;
+	 worldTransformR_arm_.rotation_.y = 0.0f;
+	 floatingRootParameter_ = 0.0f;
+}
+
+
 void Player::UpdateFloatingGimmick() {
 	const uint16_t period = 120;
 	const float step = 2.0f * (float)M_PI / period;
@@ -214,10 +261,12 @@ void Player::BehaviorRootUpdate(){
 	}
 	if (input_->TriggerKey(DIK_SPACE) && mode == 1) {
 		behaviorRequest_ = Behavior::kAttack;
-	}
+		attackFlag = true;
+	} 
 	if (input_->TriggerKey(DIK_SPACE) && mode == 2) {
 		behaviorRequest_ = Behavior::kAttackTwo;
-	}
+		attackFlag = true;
+	} 
 	// worldTransformHead_.translation_.y = 5;
 	move_ = TransformNormal(move_, MakeRotateYMatrix(viewProjection_->rotation_.y));
 	// Y軸周り角度
@@ -225,7 +274,24 @@ void Player::BehaviorRootUpdate(){
 	// ベクターの加算
 	worldTransform_.translation_ = Add(worldTransform_.translation_, move_); 
 	UpdateFloatingGimmick();
+
 }
+void Player::TitleBehaviorRootUpdate() {
+	Vector3 move_ = {0, 0, 0};
+	if (input_->TriggerKey(DIK_SPACE)) {
+		behaviorRequest_ = Behavior::kAttackTwo;
+		attackFlag = true;
+	}
+	// worldTransformHead_.translation_.y = 5;
+	move_ = TransformNormal(move_, MakeRotateYMatrix(viewProjection_->rotation_.y));
+	// Y軸周り角度
+	worldTransform_.rotation_.y = std::atan2(move_.x, move_.z);
+	// ベクターの加算
+	worldTransform_.translation_ = Add(worldTransform_.translation_, move_);
+	UpdateFloatingGimmick();
+}
+
+
 void Player::BehaviorAttackInitialize() {
 
 	worldTransformHammer_.rotation_.x = 1.5f;
@@ -255,6 +321,7 @@ void Player::BehaviorAttackUpdate() {
 	if (attackTime >= 45) {
 		behaviorRequest_ = Player::Behavior::kRoot;
 		attackTime = 0;
+		attackFlag = false;
 	}
 }
 
@@ -289,5 +356,6 @@ void Player::BehaviorAttackTwoUpdate() {
 	if (attackTime >= 90) {
 		behaviorRequest_ = Player::Behavior::kRoot;
 		attackTime = 0;
+		attackFlag = false;
 	}
 }
